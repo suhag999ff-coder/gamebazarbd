@@ -1,0 +1,2795 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0">
+<meta name="theme-color" content="#0a1e3f">
+<title>GAME BAZAR - All Top Up BD</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Hind+Siliguri:wght@400;500;600;700&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins','Hind Siliguri',sans-serif;-webkit-tap-highlight-color:transparent}
+:root{
+--bg:#f0f4f9;--card:#fff;--dark:#0a1e3f;--dark2:#132a52;--navy:#071329;
+--blue:#1a56db;--blue2:#2e6ff2;--blue3:#0a3d91;--blue-soft:#eaf1ff;
+--blue-grad:linear-gradient(135deg,#1a56db,#0a3d91);--blue-grad2:linear-gradient(135deg,#2e6ff2,#1a56db);
+--red:#dc2626;--red2:#ef4444;--red-grad:linear-gradient(135deg,#dc2626,#991b1b);
+--green:#16a34a;--green2:#22c55e;--green-grad:linear-gradient(135deg,#22c55e,#15803d);
+--gold:#f59e0b;--gold2:#fbbf24;--gold-grad:linear-gradient(135deg,#fbbf24,#d97706);
+--purple:#7c3aed;--purple-grad:linear-gradient(135deg,#a855f7,#6d28d9);
+--silver:#94a3b8;--silver-grad:linear-gradient(135deg,#cbd5e1,#64748b);
+--bronze:#b45309;--bronze-grad:linear-gradient(135deg,#d97706,#78350f);
+--bkash:#e2136e;--bkash2:#b20e56;
+--nagad:#ec1c24;--nagad2:#b0151b;
+--rocket:#6638e8;--rocket2:#4b25b8;
+--text:#0f172a;--txt:#374151;--muted:#6b7280;--soft:#9ca3af;
+--border:#e2e8f0;--border2:#f1f5f9;
+--shadow-xs:0 1px 2px rgba(10,30,63,.04);
+--shadow-sm:0 2px 8px rgba(10,30,63,.06);
+--shadow-md:0 6px 18px rgba(10,30,63,.08);
+--shadow-lg:0 14px 40px rgba(10,30,63,.12);
+--shadow-blue:0 8px 24px rgba(26,86,219,.28);
+--r-sm:8px;--r:12px;--r-md:14px;--r-lg:18px;--r-xl:24px;
+}
+body{background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+.hidden{display:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:.6}}
+@keyframes ringPulse{0%{transform:scale(.9);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+@keyframes shine{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes bounceIn{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.02);opacity:1}100%{transform:scale(1)}}
+@keyframes marquee{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+@keyframes toastIn{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes toastOut{from{transform:translateY(0);opacity:1}to{transform:translateY(-30px);opacity:0}}
+@keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes bellShake{0%,50%,100%{transform:rotate(0)}10%{transform:rotate(-12deg)}20%{transform:rotate(12deg)}30%{transform:rotate(-8deg)}40%{transform:rotate(8deg)}}
+@keyframes badgePulse{0%,100%{transform:scale(1);box-shadow:0 2px 8px rgba(220,38,38,.5)}50%{transform:scale(1.12);box-shadow:0 4px 14px rgba(220,38,38,.7)}}
+
+/* ==================== AUTH LOGO ==================== */
+.brand-logo-pro{
+display:flex;align-items:center;gap:2px;
+font-family:'Orbitron','Poppins',sans-serif;
+font-weight:900;font-size:22px;letter-spacing:1.5px;
+background:linear-gradient(90deg,#fbbf24 0%,#f59e0b 25%,#ffffff 50%,#2e6ff2 75%,#1a56db 100%);
+background-size:200% auto;
+-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+animation:gradientMove 4s ease infinite;
+text-shadow:0 0 30px rgba(46,111,242,.15);
+cursor:pointer;position:relative;
+}
+.brand-logo-pro .w8-highlight{
+background:linear-gradient(135deg,#fbbf24,#d97706);
+-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+filter:drop-shadow(0 2px 6px rgba(245,158,11,.35));
+}
+.brand-logo-pro .shop-text{
+font-weight:800;letter-spacing:2px;
+background:linear-gradient(135deg,#2e6ff2,#0a3d91);
+-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.brand-logo-pro.lg{font-size:28px;letter-spacing:2px}
+.brand-logo-pro.sm{font-size:18px;letter-spacing:1px}
+
+/* ==================== HEADER APP NAME ==================== */
+.header-app-name{
+font-family:'Poppins','Orbitron',sans-serif;
+font-weight:900;font-size:19px;letter-spacing:.3px;
+color:var(--dark);
+white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+min-width:0;flex:1;
+text-transform:uppercase;
+}
+.header-app-name-badge{
+display:inline-flex;align-items:center;gap:3px;
+font-family:'Poppins',sans-serif;
+font-weight:900;font-size:8.5px;letter-spacing:.6px;
+padding:3px 7px;border-radius:50px;
+background:linear-gradient(135deg,#fbbf24,#d97706);
+color:#1a0e00;text-transform:uppercase;
+box-shadow:0 3px 8px rgba(245,158,11,.35);
+flex-shrink:0;
+}
+.header-app-name-badge i{font-size:8px}
+
+/* ==================== NOTIFICATION BUTTON ==================== */
+.header-notif-pro{
+position:relative;
+width:36px;height:36px;border-radius:50%;
+background:linear-gradient(135deg,#eaf1ff,#dbeafe);
+color:var(--blue);
+border:1px solid rgba(26,86,219,.08);
+cursor:pointer;font-family:inherit;
+display:flex;align-items:center;justify-content:center;
+font-size:14px;flex-shrink:0;
+transition:.2s;
+box-shadow:0 2px 8px rgba(26,86,219,.1);
+}
+.header-notif-pro:active{transform:scale(.9)}
+.header-notif-pro.has-unread{
+background:linear-gradient(135deg,#fef3c7,#fde68a);
+color:#b45309;
+border-color:rgba(180,83,9,.15);
+box-shadow:0 2px 10px rgba(245,158,11,.25);
+}
+.header-notif-pro.has-unread i{animation:bellShake 2.5s ease-in-out infinite}
+.header-notif-pro .dot{
+position:absolute;top:-4px;right:-4px;
+min-width:17px;height:17px;padding:0 4px;
+background:var(--red-grad);color:#fff;
+border-radius:50px;border:2px solid #fff;
+font-size:8.5px;font-weight:900;
+display:none;align-items:center;justify-content:center;
+line-height:1;letter-spacing:-.2px;
+font-family:'Poppins',sans-serif;
+}
+.header-notif-pro.has-unread .dot{display:flex;animation:badgePulse 2s ease-in-out infinite}
+
+/* ==================== AUTH ==================== */
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(160deg,#0a1e3f 0%,#071329 100%);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.auth-overlay::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(46,111,242,.2),transparent 70%);animation:pulse 6s infinite}
+.auth-overlay::after{content:'';position:absolute;bottom:-100px;left:-100px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.15),transparent 70%);animation:pulse 8s infinite}
+.auth-card{width:100%;max-width:400px;background:#fff;border-radius:var(--r-xl);padding:32px 26px;box-shadow:0 40px 100px rgba(0,0,0,.4);text-align:center;position:relative;z-index:1;animation:bounceIn .45s ease}
+.auth-logo-wrap{margin-bottom:6px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.auth-logo-img{height:60px;object-fit:contain;display:none}
+.auth-heading{font-size:15px;font-weight:700;color:var(--txt);margin-top:8px}
+.auth-sub{font-size:12px;color:var(--muted);margin-top:3px;font-weight:500}
+.auth-toggle{display:flex;background:var(--bg);padding:4px;border-radius:var(--r);margin:22px 0 18px}
+.auth-toggle button{flex:1;padding:11px;border:none;background:transparent;border-radius:var(--r-sm);font-weight:700;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;transition:.2s}
+.auth-toggle button.active{background:#fff;color:var(--blue);box-shadow:0 2px 8px rgba(26,86,219,.12)}
+.auth-input{width:100%;padding:14px 16px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-family:inherit;color:var(--text);margin-bottom:12px;transition:.2s}
+.auth-input:focus{outline:none;border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(26,86,219,.1)}
+.auth-btn{width:100%;padding:14px;background:var(--blue-grad);color:#fff;border:none;border-radius:var(--r);font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit;box-shadow:var(--shadow-blue);transition:.15s;margin-top:6px;letter-spacing:.3px;display:flex;align-items:center;justify-content:center;gap:8px}
+.auth-btn:active{transform:scale(.98)}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.google-btn{background:#fff;color:#374151;border:1.5px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04);display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:14px;padding:13px;width:100%;border-radius:var(--r);cursor:pointer;font-family:inherit;transition:.2s}
+.google-btn:hover{background:#f8fafc;border-color:#cbd5e1;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.google-btn:active{transform:scale(.98)}
+.google-icon{width:20px;height:20px}
+
+/* ==================== APP SHELL ==================== */
+#appContent{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh;position:relative;padding-bottom:92px;box-shadow:0 0 80px rgba(10,30,63,.08)}
+
+/* HEADER */
+.app-header{position:sticky;top:0;z-index:50;background:#fff;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--border2);box-shadow:0 2px 12px rgba(10,30,63,.04)}
+.brand-area{display:flex;align-items:center;gap:7px;cursor:pointer;min-width:0;flex:1;overflow:visible;padding:2px 0}
+.brand-logo-img{height:32px;object-fit:contain;display:none;flex-shrink:0;border-radius:6px}
+.header-actions{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.header-login-btn{background:var(--blue-grad);color:#fff;padding:8px 18px;border-radius:9px;font-size:12.5px;font-weight:800;border:none;cursor:pointer;font-family:inherit;box-shadow:var(--shadow-blue);transition:.15s;letter-spacing:.3px}
+.header-login-btn:active{transform:scale(.96)}
+.balance-pill{background:linear-gradient(135deg,#0a1e3f,#132a52);color:#fff;padding:7px 13px;border-radius:50px;font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:5px;cursor:pointer;box-shadow:0 4px 14px rgba(10,30,63,.28);transition:.15s;white-space:nowrap;border:1px solid rgba(255,255,255,.06)}
+.balance-pill:active{transform:scale(.96)}
+.balance-pill i{font-size:11px;color:#fbbf24}
+.balance-pill .coin-sym{color:#fbbf24;font-weight:900;font-size:13px;margin-left:1px}
+.header-avatar{width:36px;height:36px;border-radius:50%;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;cursor:pointer;text-transform:uppercase;box-shadow:0 4px 12px rgba(26,86,219,.25);overflow:hidden;flex-shrink:0;border:2px solid #fff;outline:2px solid var(--blue-soft)}
+.header-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* NOTICE */
+.notice-bar-prof{background:linear-gradient(90deg,#0a1e3f 0%,#132a52 50%,#0a1e3f 100%);color:#fff;padding:10px 14px;display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:500;overflow:hidden;position:relative}
+.notice-bar-prof::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#fbbf24,#d97706);box-shadow:0 0 12px rgba(251,191,36,.5)}
+.notice-bar-prof .notice-icon{width:26px;height:26px;border-radius:50%;background:rgba(251,191,36,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notice-bar-prof .notice-icon i{color:#fbbf24;font-size:11px}
+.notice-text{white-space:nowrap;animation:marquee 25s linear infinite;font-weight:600;letter-spacing:.1px}
+
+/* MAIN */
+.app-main{padding:14px}
+
+/* BANNER */
+.banner-slider{position:relative;width:100%;height:170px;border-radius:var(--r-lg);overflow:hidden;background:var(--bg);box-shadow:var(--shadow-md);margin-bottom:18px}
+.banner-inner{display:flex;height:100%;width:100%;transition:transform .55s cubic-bezier(.55,0,.35,1)}
+.banner-slide{width:100%;height:100%;flex-shrink:0}
+.banner-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.banner-dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:5}
+.banner-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:.2s}
+.banner-dot.active{width:20px;border-radius:4px;background:#fff}
+
+/* SECTION */
+.section-title{font-size:16.5px;font-weight:800;color:var(--dark);margin:22px 0 13px;display:flex;align-items:center;gap:9px;letter-spacing:-.3px}
+.section-title::before{content:'';width:4px;height:18px;background:var(--blue-grad);border-radius:2px}
+.section-title.plain::before{display:none}
+.section-title.gold::before{background:var(--gold-grad)}
+.section-title .badge-count{margin-left:auto;font-size:10.5px;font-weight:800;padding:3px 10px;border-radius:50px;background:var(--blue-soft);color:var(--blue);letter-spacing:.4px}
+
+/* GAMES */
+.games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.game-tile{background:#fff;border-radius:var(--r);overflow:hidden;cursor:pointer;border:1px solid var(--border2);box-shadow:var(--shadow-sm);transition:.2s}
+.game-tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:var(--blue)}
+.game-tile:active{transform:scale(.97)}
+.game-tile-img{width:100%;aspect-ratio:1;background:var(--bg);overflow:hidden}
+.game-tile-img img{width:100%;height:100%;object-fit:cover}
+.game-tile-name{padding:8px 5px;text-align:center;font-size:10.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-heading{font-size:13.5px;font-weight:800;color:var(--dark);margin:18px 0 10px;padding-left:10px;border-left:3px solid var(--blue)}
+
+/* LATEST ORDERS */
+.order-row{background:#fff;padding:12px;border-radius:var(--r);border:1px solid var(--border2);display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;box-shadow:var(--shadow-xs)}
+.order-avatar{width:38px;height:38px;border-radius:50%;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.order-info{flex:1;min-width:0;margin-left:10px}
+.order-name{font-size:12.5px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.order-prod{font-size:11px;color:var(--muted);margin-top:2px}
+.order-status{padding:3px 10px;border-radius:50px;font-size:10px;font-weight:800;text-transform:capitalize;flex-shrink:0}
+.status-processing{background:#dbeafe;color:#1e40af}
+.status-success{background:#dcfce7;color:#166534}
+.status-pending{background:#fef3c7;color:#92400e}
+
+/* LEADERBOARD */
+.leaderboard-wrap{background:linear-gradient(180deg,#0a1e3f 0%,#071329 100%);border-radius:var(--r-xl);padding:20px 14px 18px;box-shadow:var(--shadow-lg);margin-bottom:16px;position:relative;overflow:hidden}
+.leaderboard-wrap::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.2),transparent 70%)}
+.leaderboard-wrap::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(26,86,219,.25),transparent 70%)}
+.lb-head{text-align:center;margin-bottom:20px;position:relative;z-index:1}
+.lb-head-title{font-size:18px;font-weight:900;color:#fff;letter-spacing:-.3px;display:flex;align-items:center;justify-content:center;gap:8px}
+.lb-head-title i{color:#fbbf24;font-size:16px}
+.lb-head-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:4px;font-weight:500;letter-spacing:.3px}
+.podium{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px;align-items:end;margin-bottom:18px;position:relative;z-index:1}
+.podium-item{text-align:center}
+.podium-item .avatar-wrap{position:relative;display:inline-block;margin-bottom:8px}
+.podium-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:20px;color:#fff;text-transform:uppercase;border:3px solid;background:var(--blue-grad);box-shadow:0 8px 24px rgba(0,0,0,.35);overflow:hidden}
+.podium-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.podium-item.rank1 .podium-avatar{width:74px;height:74px;font-size:28px;border-color:#fbbf24;background:linear-gradient(135deg,#fbbf24,#b45309);box-shadow:0 10px 30px rgba(245,158,11,.5),0 0 0 5px rgba(245,158,11,.15)}
+.podium-item.rank2 .podium-avatar{border-color:#cbd5e1;background:linear-gradient(135deg,#cbd5e1,#64748b);box-shadow:0 8px 22px rgba(148,163,184,.4)}
+.podium-item.rank3 .podium-avatar{border-color:#d97706;background:linear-gradient(135deg,#d97706,#78350f);box-shadow:0 8px 22px rgba(180,83,9,.4)}
+.crown-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:20px;color:#fbbf24;filter:drop-shadow(0 2px 6px rgba(245,158,11,.6))}
+.rank-badge{position:absolute;bottom:-4px;right:-4px;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;border:2px solid #fff;z-index:2}
+.podium-item.rank1 .rank-badge{background:linear-gradient(135deg,#fbbf24,#b45309);width:28px;height:28px;font-size:12px}
+.podium-item.rank2 .rank-badge{background:linear-gradient(135deg,#cbd5e1,#64748b)}
+.podium-item.rank3 .rank-badge{background:linear-gradient(135deg,#d97706,#78350f)}
+.podium-name{font-size:11.5px;font-weight:700;color:#fff;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;padding:0 4px}
+.podium-amount{font-size:11.5px;font-weight:900;color:#fbbf24;letter-spacing:-.2px}
+.podium-item.rank2 .podium-amount{color:#cbd5e1}
+.podium-item.rank3 .podium-amount{color:#f0a868}
+.podium-base{height:12px;border-radius:8px 8px 0 0;margin-top:10px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02))}
+.podium-item.rank1 .podium-base{height:28px;background:linear-gradient(180deg,rgba(245,158,11,.35),rgba(245,158,11,.08))}
+.podium-item.rank2 .podium-base{height:20px;background:linear-gradient(180deg,rgba(148,163,184,.28),rgba(148,163,184,.05))}
+.podium-item.rank3 .podium-base{height:14px;background:linear-gradient(180deg,rgba(180,83,9,.3),rgba(180,83,9,.05))}
+.lb-rest{position:relative;z-index:1;display:flex;flex-direction:column;gap:6px}
+.lb-rest-row{display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:9px 12px;backdrop-filter:blur(4px)}
+.lb-rest-rank{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
+.lb-rest-avatar{width:34px;height:34px;border-radius:50%;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0;text-transform:uppercase;overflow:hidden}
+.lb-rest-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.lb-rest-info{flex:1;min-width:0}
+.lb-rest-name{font-size:12.5px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-rest-sub{font-size:10px;color:rgba(255,255,255,.5);margin-top:1px;font-weight:500}
+.lb-rest-amt{font-size:12.5px;font-weight:900;color:#fbbf24;flex-shrink:0}
+
+/* PREMIUM */
+.premium-banner{background:linear-gradient(135deg,#0a1e3f 0%,#1a56db 60%,#7c3aed 100%);border-radius:var(--r-xl);padding:20px 18px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.premium-banner::before{content:'';position:absolute;top:-30px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.35),transparent 70%)}
+.premium-banner::after{content:'';position:absolute;bottom:-40px;left:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.35),transparent 70%)}
+.premium-content{position:relative;z-index:1;display:flex;align-items:center;gap:14px}
+.premium-icon{width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#fbbf24,#d97706);color:#1a0e00;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 8px 22px rgba(245,158,11,.45)}
+.premium-text{flex:1}
+.premium-title{font-size:16px;font-weight:900;color:#fff;letter-spacing:-.3px}
+.premium-desc{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:3px;font-weight:500;line-height:1.4}
+.premium-progress-wrap{margin-top:14px;position:relative;z-index:1;background:rgba(0,0,0,.2);padding:11px 13px;border-radius:var(--r)}
+.premium-progress-info{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.75);margin-bottom:7px;font-weight:600}
+.premium-progress-info b{color:#fbbf24;font-weight:900}
+.premium-progress-bar{height:8px;background:rgba(255,255,255,.15);border-radius:10px;overflow:hidden;position:relative}
+.premium-progress-fill{height:100%;background:linear-gradient(90deg,#fbbf24,#22c55e);border-radius:10px;transition:width .6s;box-shadow:0 0 12px rgba(251,191,36,.5)}
+.premium-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-bottom:16px}
+.premium-card{background:#fff;border-radius:var(--r-md);overflow:hidden;border:1.5px solid var(--border2);box-shadow:var(--shadow-sm);transition:.2s}
+.premium-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.premium-card.locked{opacity:.92}
+.premium-card.unlocked{border-color:var(--green);box-shadow:0 4px 18px rgba(22,163,74,.18)}
+.premium-img-wrap{width:100%;aspect-ratio:1.15;background:var(--bg);overflow:hidden;position:relative}
+.premium-img-wrap img{width:100%;height:100%;object-fit:cover}
+.premium-lock{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(10,30,63,.85);backdrop-filter:blur(6px);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+.premium-lock.unlocked{background:var(--green-grad)}
+.premium-card-body{padding:11px}
+.premium-card-name{font-size:12.5px;font-weight:800;color:var(--text);line-height:1.25;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+.premium-card-desc{font-size:10.5px;color:var(--muted);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.4}
+.premium-card-meta{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:8px;font-size:10px}
+.premium-target{background:var(--blue-soft);color:var(--blue);padding:3px 8px;border-radius:50px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:inline-flex;align-items:center;gap:3px;font-size:9.5px}
+.premium-price{background:var(--red-grad);color:#fff;padding:4px 10px;border-radius:50px;font-weight:900;font-size:11px;box-shadow:0 4px 10px rgba(220,38,38,.24)}
+.premium-price.free{background:var(--green-grad);box-shadow:0 4px 10px rgba(22,163,74,.28)}
+.premium-btn{width:100%;padding:9px;border:none;border-radius:var(--r-sm);font-weight:800;font-size:11.5px;cursor:pointer;font-family:inherit;transition:.15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.premium-btn.buy{background:var(--blue-grad);color:#fff;box-shadow:var(--shadow-blue)}
+.premium-btn.locked{background:var(--bg);color:var(--soft);cursor:not-allowed;border:1px dashed var(--border)}
+
+/* SUPPORT */
+.support-card{background:#fff;border-radius:var(--r-lg);padding:18px;border:1px solid var(--border2);box-shadow:var(--shadow-sm);margin-bottom:14px;position:relative;overflow:hidden}
+.support-card-head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.support-card-icon{width:42px;height:42px;border-radius:12px;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;box-shadow:var(--shadow-blue)}
+.support-card-title{font-size:15px;font-weight:800;color:var(--dark);letter-spacing:-.2px}
+.support-card-sub{font-size:11.5px;color:var(--muted);margin-top:2px;font-weight:500}
+.support-card-sub b{color:var(--green)}
+.support-actions{display:flex;flex-direction:column;gap:9px}
+.support-btn{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:var(--r-md);color:#fff;font-weight:700;font-size:13px;transition:.2s;position:relative;overflow:hidden;cursor:pointer}
+.support-btn:active{transform:scale(.98)}
+.support-btn.wa{background:linear-gradient(135deg,#25d366,#128c7e);box-shadow:0 6px 20px rgba(37,211,102,.3)}
+.support-btn.tg{background:linear-gradient(135deg,#0088cc,#006699);box-shadow:0 6px 20px rgba(0,136,204,.3)}
+.support-btn-icon{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;backdrop-filter:blur(4px)}
+.support-btn-info{flex:1;min-width:0}
+.support-btn-title{font-size:13.5px;font-weight:800;color:#fff}
+.support-btn-desc{font-size:10.5px;color:rgba(255,255,255,.82);margin-top:2px;font-weight:500;display:flex;align-items:center;gap:5px}
+.live-dot-mini{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 1.4s infinite;box-shadow:0 0 8px #4ade80}
+.support-btn-arrow{font-size:12px;opacity:.8}
+
+/* PAYMENT FLOW */
+.card-panel{background:#fff;border-radius:var(--r-lg);padding:20px;border:1px solid var(--border2);box-shadow:var(--shadow-sm);margin-bottom:14px}
+.step-indicator{display:flex;align-items:center;gap:4px;margin-bottom:22px;padding:0 2px}
+.step-item{flex:1;text-align:center}
+.step-dot{width:32px;height:32px;border-radius:50%;background:var(--border);color:var(--soft);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin:0 auto 6px;transition:.25s}
+.step-item.active .step-dot{background:var(--blue-grad);color:#fff;box-shadow:0 6px 16px rgba(26,86,219,.35)}
+.step-item.done .step-dot{background:var(--green-grad);color:#fff}
+.step-item.done .step-dot::before{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900}
+.step-item.done .step-dot span{display:none}
+.step-label{font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+.step-item.active .step-label{color:var(--blue);font-weight:800}
+.step-line{height:2px;background:var(--border);flex:.5;margin:0 -3px 28px}
+.step-line.done{background:var(--green)}
+.step-container{display:none}
+.step-container.active{display:block;animation:fadeUp .3s ease}
+.step-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:50px;background:var(--blue-soft);color:var(--blue);font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.step-heading{font-size:16.5px;font-weight:800;color:var(--dark);letter-spacing:-.2px}
+.step-desc{font-size:12px;color:var(--muted);margin:4px 0 16px;font-weight:500}
+.amount-wrap{display:flex;align-items:center;gap:10px;background:var(--blue-soft);border:2px solid var(--border);border-radius:var(--r-md);padding:12px 18px;margin-bottom:12px;transition:.2s}
+.amount-wrap:focus-within{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(26,86,219,.1)}
+.amount-currency{font-size:26px;font-weight:900;color:var(--blue)}
+.amount-wrap input{flex:1;border:none;outline:none;background:transparent;font-size:26px;font-weight:900;color:var(--text);font-family:inherit;min-width:0}
+.amount-wrap input::-webkit-outer-spin-button,.amount-wrap input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.quick-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
+.quick-grid button{flex:1;min-width:60px;padding:10px 6px;border-radius:var(--r-sm);border:1.5px solid var(--border);background:#fff;color:var(--txt);font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;transition:.15s}
+.quick-grid button:hover{border-color:var(--blue);color:var(--blue)}
+.quick-grid button.active{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}
+.btn-full{width:100%;padding:15px;border-radius:var(--r-md);font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit;border:none;transition:.15s;letter-spacing:.2px}
+.btn-primary{background:var(--blue-grad);color:#fff;box-shadow:var(--shadow-blue)}
+.btn-primary:active{transform:scale(.98)}
+.btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-dark{background:linear-gradient(135deg,#0a1e3f,#132a52);color:#fff;box-shadow:0 8px 24px rgba(10,30,63,.35)}
+.btn-dark:active{transform:scale(.98)}
+.btn-dark:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.back-link{display:inline-flex;align-items:center;gap:8px;margin-bottom:14px;cursor:pointer;color:var(--muted);font-weight:700;font-size:13px;transition:.2s}
+.back-link:hover{color:var(--blue);gap:11px}
+.summary-strip{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--blue-soft);border-radius:var(--r);border:1px solid var(--border2);margin-bottom:16px}
+.summary-label{font-size:10.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.summary-value{font-size:18px;font-weight:900;color:var(--blue);margin-top:2px}
+.method-list{display:flex;flex-direction:column;gap:11px}
+.method-card{display:flex;align-items:center;gap:14px;padding:15px;border:2px solid var(--border);border-radius:var(--r-md);background:#fff;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.method-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.method-card:active{transform:scale(.98)}
+.method-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.method-card.bkash::before{background:var(--bkash)}
+.method-card.nagad::before{background:var(--nagad)}
+.method-card.rocket::before{background:var(--rocket)}
+.method-logo{width:52px;height:52px;border-radius:var(--r);object-fit:contain;padding:6px;background:#fff;border:1px solid var(--border2);flex-shrink:0}
+.method-info{flex:1;min-width:0}
+.method-name{font-size:14.5px;font-weight:800;color:var(--text)}
+.method-num{font-size:12px;color:var(--muted);font-weight:600;font-family:'Courier New',monospace;margin-top:2px}
+.method-type{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:50px;background:var(--blue-soft);color:var(--blue);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:5px}
+.method-arrow{color:var(--soft);font-size:16px;flex-shrink:0}
+.pay-card{border-radius:var(--r-lg);overflow:hidden;margin-bottom:18px;box-shadow:var(--shadow-md)}
+.pay-head{padding:22px 20px;text-align:center;position:relative;overflow:hidden}
+.pay-head.bkash{background:linear-gradient(135deg,var(--bkash),var(--bkash2))}
+.pay-head.nagad{background:linear-gradient(135deg,var(--nagad),var(--nagad2))}
+.pay-head.rocket{background:linear-gradient(135deg,var(--rocket),var(--rocket2))}
+.pay-head::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08)}
+.pay-head::after{content:'';position:absolute;bottom:-60px;left:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.06)}
+.pay-logo{width:68px;height:68px;border-radius:50%;background:#fff;padding:9px;object-fit:contain;margin:0 auto 12px;display:block;position:relative;z-index:1;box-shadow:0 10px 22px rgba(0,0,0,.2)}
+.pay-amount{font-size:34px;font-weight:900;color:#fff;letter-spacing:-1px;line-height:1.1;position:relative;z-index:1}
+.pay-sub{font-size:12.5px;color:rgba(255,255,255,.88);margin-top:6px;font-weight:600;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.pay-chip{padding:3px 10px;border-radius:50px;background:rgba(255,255,255,.22);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.copy-wrap{background:var(--blue-soft);border:2px dashed var(--blue);border-radius:var(--r-md);padding:15px;margin-bottom:16px}
+.copy-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.copy-label i{color:var(--blue)}
+.copy-row{display:flex;align-items:center;gap:10px}
+.copy-num{flex:1;font-size:19px;font-weight:900;color:var(--blue);font-family:'Courier New',monospace;letter-spacing:1.2px;user-select:all;word-break:break-all}
+.copy-btn{background:var(--blue-grad);color:#fff;border:none;padding:10px 14px;border-radius:var(--r-sm);font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;box-shadow:var(--shadow-blue);flex-shrink:0}
+.copy-btn:active{transform:scale(.96)}
+.copy-btn.copied{background:var(--green-grad)}
+.instr-list{list-style:none;padding:14px 16px;background:var(--bg);border-radius:var(--r);margin-bottom:16px;border:1px solid var(--border2)}
+.instr-list li{display:flex;gap:12px;padding:8px 0;font-size:12.5px;color:var(--txt);line-height:1.55;font-weight:500;align-items:flex-start}
+.instr-list li:not(:last-child){border-bottom:1px dashed var(--border)}
+.instr-num{width:24px;height:24px;border-radius:50%;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;margin-top:1px}
+.instr-list.theme-bkash .instr-num{background:linear-gradient(135deg,var(--bkash),var(--bkash2))}
+.instr-list.theme-nagad .instr-num{background:linear-gradient(135deg,var(--nagad),var(--nagad2))}
+.instr-list.theme-rocket .instr-num{background:linear-gradient(135deg,var(--rocket),var(--rocket2))}
+.ussd-chip{background:#fff;border:1px solid var(--border);padding:1px 7px;border-radius:5px;font-family:'Courier New',monospace;font-weight:800;color:var(--blue);font-size:12px;display:inline-block}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:11.5px;font-weight:800;color:var(--txt);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.form-group label i{color:var(--blue)}
+.form-group label .req{color:var(--red);font-size:13px}
+.input-field{width:100%;padding:13px 14px;border:1.5px solid var(--border);border-radius:var(--r);font-size:14px;font-family:inherit;color:var(--text);background:#fff;transition:.2s}
+.input-field:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(26,86,219,.1)}
+
+/* AUTO PAYMENT METHOD GRID */
+.auto-method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.auto-method-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;border:2px solid var(--border);border-radius:var(--r-md);background:#fff;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.auto-method-card:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.auto-method-card:active{transform:scale(.97)}
+.auto-method-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.auto-method-card.bkash::before{background:linear-gradient(90deg,var(--bkash),var(--bkash2))}
+.auto-method-card.nagad::before{background:linear-gradient(90deg,var(--nagad),var(--nagad2))}
+.auto-method-card.rocket::before{background:linear-gradient(90deg,var(--rocket),var(--rocket2))}
+.auto-method-icon{width:48px;height:48px;border-radius:12px;object-fit:contain;background:#fff;padding:5px;box-shadow:0 4px 12px rgba(10,30,63,.08);border:1px solid var(--border2)}
+.auto-method-fallback{width:48px;height:48px;border-radius:12px;display:none;align-items:center;justify-content:center;font-weight:900;font-size:15px;color:#fff;box-shadow:0 4px 12px rgba(10,30,63,.15)}
+.auto-method-card.bkash .auto-method-fallback{background:linear-gradient(135deg,var(--bkash),var(--bkash2))}
+.auto-method-card.nagad .auto-method-fallback{background:linear-gradient(135deg,var(--nagad),var(--nagad2))}
+.auto-method-card.rocket .auto-method-fallback{background:linear-gradient(135deg,var(--rocket),var(--rocket2))}
+.auto-method-label{font-size:11.5px;font-weight:800;color:var(--text);letter-spacing:.2px}
+
+/* ============ TOPUP LAYOUT ============ */
+.topup-back{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.topup-back-btn{width:36px;height:36px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--txt);cursor:pointer;font-size:14px}
+.topup-title{font-size:17px;font-weight:800;color:var(--dark);letter-spacing:-.3px}
+.topup-game-card{background:#fff;padding:14px;border-radius:var(--r-lg);border:1px solid var(--border2);display:flex;align-items:center;gap:14px;margin-bottom:14px;box-shadow:var(--shadow-sm)}
+.topup-game-img{width:56px;height:56px;border-radius:var(--r);object-fit:cover;background:var(--bg)}
+.topup-game-name{font-size:15px;font-weight:800;color:var(--dark)}
+.topup-game-sub{font-size:11.5px;color:var(--muted);margin-top:2px;font-weight:600}
+.step-panel{background:#fff;padding:16px;border-radius:var(--r-lg);border:1px solid var(--border2);box-shadow:var(--shadow-sm);margin-bottom:14px}
+.step-panel-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.step-circle{width:28px;height:28px;border-radius:50%;background:var(--red-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0}
+.step-circle.blue{background:var(--blue-grad)}
+.step-circle.dark{background:linear-gradient(135deg,#0a1e3f,#132a52)}
+.step-panel-title{font-size:14px;font-weight:800;color:var(--text)}
+.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.product-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:14px 10px;text-align:center;cursor:pointer;transition:.2s;position:relative}
+.product-card:hover{border-color:var(--blue);box-shadow:var(--shadow-md)}
+.product-card.selected{border:2px solid var(--red);background:#fef2f2}
+.product-card.selected::after{content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;top:-8px;right:-8px;background:var(--red-grad);color:#fff;width:22px;height:22px;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center}
+.product-card.disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+.product-icon{font-size:22px;color:#60a5fa;margin-bottom:6px}
+.product-name{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:4px}
+.product-price{font-size:17px;font-weight:900;color:var(--red)}
+.product-stock{font-size:9.5px;padding:2px 10px;border-radius:50px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;display:inline-block;margin-top:6px}
+.stock-in{background:#dcfce7;color:#166534}
+.stock-out{background:#fee2e2;color:#dc2626}
+.rules-box{background:var(--blue-soft);border:1px solid #bfdbfe;padding:14px;border-radius:var(--r);margin-bottom:16px}
+.rules-box h4{font-size:12.5px;font-weight:800;color:var(--blue3);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.rules-box p{font-size:11.5px;color:#1e40af;line-height:1.65;font-weight:500}
+
+/* ============ PAY OPTION CARDS (Wallet / Instant) - PROFESSIONAL ============ */
+.pay-option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+
+.pay-option-card{
+position:relative;
+border:2.5px solid var(--border);
+border-radius:var(--r-lg);
+padding:14px 12px 12px;
+background:#fff;
+cursor:pointer;
+transition:.25s;
+display:flex;flex-direction:column;align-items:center;gap:10px;
+overflow:hidden;min-height:148px;justify-content:center;text-align:center;
+}
+.pay-option-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.pay-option-card:active{transform:scale(.97)}
+
+/* Wallet Pay theme */
+.pay-option-card.wallet-theme{
+background:linear-gradient(160deg,#fff8e6 0%,#fff 55%,#fff5d6 100%);
+border-color:#fcd34d;
+}
+.pay-option-card.wallet-theme::after{
+content:'';position:absolute;top:-30px;right:-30px;
+width:100px;height:100px;border-radius:50%;
+background:radial-gradient(circle,rgba(251,191,36,.28),transparent 70%);
+pointer-events:none;
+}
+
+/* Instant Pay theme */
+.pay-option-card.instant-theme{
+background:linear-gradient(160deg,#e6efff 0%,#fff 55%,#dbeafe 100%);
+border-color:#93c5fd;
+}
+.pay-option-card.instant-theme::after{
+content:'';position:absolute;top:-30px;right:-30px;
+width:100px;height:100px;border-radius:50%;
+background:radial-gradient(circle,rgba(59,130,246,.25),transparent 70%);
+pointer-events:none;
+}
+
+.pay-option-card.selected.wallet-theme{
+border-color:#d97706;
+box-shadow:0 8px 24px rgba(245,158,11,.28),0 0 0 4px rgba(251,191,36,.14);
+}
+.pay-option-card.selected.instant-theme{
+border-color:#1d4ed8;
+box-shadow:0 8px 24px rgba(26,86,219,.28),0 0 0 4px rgba(59,130,246,.14);
+}
+.pay-option-card.selected::before{
+content:'\f00c';font-family:'Font Awesome 6 Free';font-weight:900;
+position:absolute;top:0;left:0;width:32px;height:32px;
+background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;
+font-size:13px;display:flex;align-items:center;justify-content:center;
+border-radius:0 0 14px 0;
+box-shadow:0 3px 10px rgba(22,163,74,.35);
+z-index:3;
+}
+
+/* Option Icon (image) */
+.pay-option-icon-img{
+width:100%;max-width:100px;height:78px;object-fit:contain;
+display:block;position:relative;z-index:2;
+filter:drop-shadow(0 4px 10px rgba(10,30,63,.12));
+}
+.pay-option-icon-img.narrow{max-width:64px;height:64px}
+
+/* Icon container (fallback / emoji) */
+.pay-option-icon-box{
+width:78px;height:78px;border-radius:20px;
+display:flex;align-items:center;justify-content:center;
+font-size:36px;color:#fff;flex-shrink:0;
+box-shadow:0 8px 20px rgba(0,0,0,.18);
+position:relative;z-index:2;
+}
+.pay-option-icon-box.wallet{
+background:linear-gradient(135deg,#fbbf24,#d97706);
+box-shadow:0 8px 22px rgba(245,158,11,.45);
+}
+.pay-option-icon-box.instant{
+background:linear-gradient(135deg,#3b82f6,#1e40af);
+box-shadow:0 8px 22px rgba(59,130,246,.45);
+}
+
+.pay-option-label{
+font-size:14px;font-weight:900;color:var(--text);letter-spacing:-.2px;
+position:relative;z-index:2;display:flex;align-items:center;gap:5px;justify-content:center;
+}
+.pay-option-label i{font-size:12px;color:#d97706}
+.pay-option-card.instant-theme .pay-option-label i{color:#1d4ed8}
+
+.pay-option-amount{
+font-size:11.5px;font-weight:700;color:var(--muted);
+position:relative;z-index:2;
+}
+.pay-option-amount b{color:var(--red);font-weight:900;font-size:13px;font-family:'Courier New',monospace}
+.pay-option-card.instant-theme .pay-option-amount b{color:#1d4ed8}
+
+/* Instant sub icons row */
+.pay-option-sub-icons{
+display:flex;gap:5px;justify-content:center;align-items:center;
+position:relative;z-index:2;margin-top:-2px;
+}
+.pay-option-sub-icons img{
+width:28px;height:28px;object-fit:contain;border-radius:7px;
+background:#fff;padding:3px;border:1px solid var(--border2);
+box-shadow:0 2px 6px rgba(10,30,63,.06);
+}
+.pay-option-sub-icons .fb{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:9px}
+.pay-option-sub-icons .fb.bkash{background:linear-gradient(135deg,var(--bkash),var(--bkash2))}
+.pay-option-sub-icons .fb.nagad{background:linear-gradient(135deg,var(--nagad),var(--nagad2))}
+.pay-option-sub-icons .fb.rocket{background:linear-gradient(135deg,var(--rocket),var(--rocket2))}
+
+/* Balance info row */
+.balance-info-row{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.balance-info-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--txt);font-weight:600}
+.balance-info-item i{width:20px;height:20px;border-radius:50%;background:#f1f5f9;color:#64748b;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.balance-info-item b{color:var(--text);font-weight:900;font-family:'Courier New',monospace;font-size:13px}
+.balance-info-item.need b{color:var(--red)}
+
+/* Instant sub-methods */
+.instant-sub{margin-top:6px;padding:12px;background:linear-gradient(180deg,#f8fafc,#fff);border-radius:var(--r);border:1px dashed var(--border);animation:fadeUp .3s ease}
+.instant-sub-title{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;text-align:center}
+.instant-method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.instant-method-btn{
+border:1.5px solid var(--border);background:#fff;border-radius:var(--r-sm);
+padding:10px 6px;cursor:pointer;font-family:inherit;
+display:flex;flex-direction:column;align-items:center;gap:6px;
+transition:.15s;
+}
+.instant-method-btn:hover{border-color:var(--blue);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.instant-method-btn.active{border:2px solid #0a1e3f;background:linear-gradient(180deg,#f8fafc,#fff);box-shadow:0 4px 12px rgba(10,30,63,.12)}
+.instant-method-btn img{width:38px;height:38px;object-fit:contain;border-radius:8px;background:#fff;padding:3px;border:1px solid var(--border2)}
+.instant-method-btn span{font-size:10.5px;font-weight:800;color:var(--text);text-transform:capitalize}
+
+/* PROFILE */
+.profile-head{text-align:center;padding:22px 16px}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;margin:0 auto 12px;position:relative;text-transform:uppercase;box-shadow:0 10px 26px rgba(26,86,219,.32);border:3px solid #fff}
+.profile-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-avatar::after{content:'\f058';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;bottom:-2px;right:-2px;background:var(--green-grad);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;border:3px solid #fff;z-index:2;box-shadow:0 3px 8px rgba(22,163,74,.35)}
+.profile-name{font-size:20px;font-weight:900;color:var(--dark)}
+.profile-email{font-size:12px;color:var(--muted);margin-top:3px}
+.profile-tag{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 14px;border-radius:50px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+.tag-user{background:var(--blue-soft);color:var(--blue)}
+.tag-premium{background:var(--gold-grad);color:#3a2400;box-shadow:0 4px 12px rgba(245,158,11,.3)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.stat-box{background:#fff;padding:15px;border-radius:var(--r-md);border:1px solid var(--border2);text-align:center;box-shadow:var(--shadow-sm)}
+.stat-box i{font-size:20px;margin-bottom:6px;display:block}
+.stat-box-bal i{color:var(--green)}
+.stat-box-top i{color:var(--gold)}
+.stat-box-ord i{color:var(--blue)}
+.stat-box-spent i{color:var(--red)}
+.stat-box-val{font-size:17px;font-weight:900;color:var(--dark)}
+.stat-box-label{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+
+/* PERSONAL INFO CARD */
+.profile-info-card{background:#fff;border-radius:var(--r-lg);border:1px solid var(--border2);box-shadow:var(--shadow-sm);margin-bottom:14px;overflow:hidden}
+.profile-info-head{padding:14px 16px;background:linear-gradient(135deg,#0a1e3f,#132a52);display:flex;align-items:center;gap:10px;position:relative;overflow:hidden}
+.profile-info-head::before{content:'';position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(46,111,242,.35),transparent 70%)}
+.profile-info-head i{color:#fbbf24;font-size:15px;position:relative;z-index:1}
+.profile-info-head-title{font-size:12.5px;font-weight:900;color:#fff;text-transform:uppercase;letter-spacing:.5px;position:relative;z-index:1}
+.profile-info-head-edit{margin-left:auto;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:10px;font-weight:800;padding:5px 12px;border-radius:50px;cursor:pointer;font-family:inherit;transition:.15s;backdrop-filter:blur(4px);position:relative;z-index:1;display:inline-flex;align-items:center;gap:5px}
+.profile-info-head-edit:active{transform:scale(.95)}
+.profile-info-body{padding:6px 16px 10px}
+.info-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--border2)}
+.info-row:last-child{border-bottom:none}
+.info-icon{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.info-icon.blue{background:#dbeafe;color:#1e40af}
+.info-icon.green{background:#dcfce7;color:#166534}
+.info-icon.purple{background:#ede9fe;color:#6d28d9}
+.info-icon.gold{background:#fef3c7;color:#92400e}
+.info-icon.red{background:#fee2e2;color:#991b1b}
+.info-icon.silver{background:var(--bg);color:var(--muted)}
+.info-content{flex:1;min-width:0}
+.info-label{font-size:9.5px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.info-value{font-size:13px;font-weight:700;color:var(--text);margin-top:2px;word-break:break-word;line-height:1.35}
+.info-value.mono{font-family:'Courier New',monospace;font-size:11.5px;font-weight:800;color:var(--blue)}
+
+.menu-list{background:#fff;border-radius:var(--r-lg);border:1px solid var(--border2);overflow:hidden;box-shadow:var(--shadow-sm)}
+.menu-item{display:flex;align-items:center;gap:12px;padding:15px 16px;cursor:pointer;transition:.15s;border-bottom:1px solid var(--border2)}
+.menu-item:last-child{border-bottom:none}
+.menu-item:hover{background:var(--blue-soft)}
+.menu-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.menu-icon.blue{background:#dbeafe;color:#1e40af}
+.menu-icon.green{background:#dcfce7;color:#166534}
+.menu-icon.yellow{background:#fef3c7;color:#92400e}
+.menu-icon.red{background:#fee2e2;color:#991b1b}
+.menu-icon.purple{background:#ede9fe;color:#6d28d9}
+.menu-icon.gold{background:#fef3c7;color:#92400e}
+.menu-text{flex:1;font-size:13.5px;font-weight:700;color:var(--text)}
+.menu-arrow{color:var(--soft);font-size:12px}
+
+/* ORDER CARDS */
+.order-card{background:#fff;border-radius:var(--r-md);border:1px solid var(--border2);padding:14px;margin-bottom:10px;box-shadow:var(--shadow-sm);border-left:4px solid var(--blue)}
+.order-card.status-success{border-left-color:var(--green)}
+.order-card.status-processing{border-left-color:var(--gold)}
+.order-card.status-rejected,.order-card.status-cancelled{border-left-color:var(--red)}
+.order-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;gap:8px}
+.order-card-title{font-size:13.5px;font-weight:800;color:var(--text)}
+.order-card-date{font-size:10.5px;color:var(--muted);margin-top:3px}
+.order-badge{padding:3px 10px;border-radius:50px;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.order-card-body{padding-top:10px;border-top:1px solid var(--border2);display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.order-card-prod{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:4px}
+.order-card-id{font-size:10.5px;color:var(--muted);font-family:'Courier New',monospace;font-weight:600;background:var(--bg);padding:2px 8px;border-radius:4px;display:inline-block}
+.order-card-price{font-size:17px;font-weight:900;color:var(--red);text-align:right;flex-shrink:0}
+.pay-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:50px;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;margin-left:4px;vertical-align:middle}
+.pay-badge.wallet{background:#fef3c7;color:#92400e}
+.pay-badge.instant{background:#fce7f3;color:#be185d}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border2);padding:6px 6px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;z-index:40;box-shadow:0 -6px 24px rgba(10,30,63,.08)}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 3px;color:var(--soft);cursor:pointer;transition:.15s;background:transparent;border:none;font-family:inherit;position:relative}
+.nav-item i{font-size:18px}
+.nav-item span{font-size:9.5px;font-weight:700}
+.nav-item.active{color:var(--blue)}
+.nav-item.active::after{content:'';position:absolute;top:-6px;width:18px;height:3px;background:var(--blue-grad);border-radius:3px}
+
+/* FAB */
+.fab-wrap{position:fixed;bottom:88px;right:16px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+@media(min-width:520px){.fab-wrap{right:calc(50vw - 240px + 16px)}}
+.fab-label{background:linear-gradient(135deg,#0a1e3f,#1a56db);color:#fff;font-size:11px;font-weight:800;padding:7px 13px;border-radius:50px;box-shadow:var(--shadow-md);letter-spacing:.2px;animation:pulse 2.4s ease-in-out infinite}
+.fab-main-wrap{position:relative}
+.fab-main{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#1a56db,#0a3d91);color:#fff;font-size:22px;border:none;cursor:pointer;box-shadow:0 10px 26px rgba(26,86,219,.45);display:flex;align-items:center;justify-content:center;position:relative;z-index:2;font-family:inherit;transition:.2s}
+.fab-main:active{transform:scale(.94)}
+.fab-main-wrap::before{content:'';position:absolute;inset:0;border-radius:50%;background:rgba(26,86,219,.4);animation:ringPulse 2s infinite;z-index:1}
+.fab-main-wrap::after{content:'';position:absolute;inset:0;border-radius:50%;background:rgba(26,86,219,.3);animation:ringPulse 2s infinite .5s;z-index:1}
+.fab-options{position:absolute;bottom:70px;right:0;display:flex;flex-direction:column;gap:9px;opacity:0;pointer-events:none;transform:translateY(10px) scale(.9);transition:.25s;transform-origin:bottom right}
+.fab-wrap.open .fab-options{opacity:1;pointer-events:auto;transform:translateY(0) scale(1)}
+.fab-option{display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:50px;background:#fff;box-shadow:var(--shadow-md);font-size:12.5px;font-weight:800;color:var(--txt);cursor:pointer;transition:.15s;white-space:nowrap;border:1px solid var(--border2)}
+.fab-option:hover{transform:translateX(-3px)}
+.fab-option .ico{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.fab-option.wa .ico{background:linear-gradient(135deg,#25d366,#128c7e)}
+.fab-option.tg .ico{background:linear-gradient(135deg,#0088cc,#006699)}
+
+/* FOOTER */
+.app-footer{background:#fff;padding:22px 16px;border-top:1px solid var(--border2);margin-top:20px;text-align:center;border-radius:var(--r-lg) var(--r-lg) 0 0}
+.footer-brand{margin-bottom:6px;display:flex;align-items:center;justify-content:center}
+.footer-desc{font-size:11px;color:var(--muted);margin-bottom:16px}
+.footer-social{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.footer-social a{display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;background:var(--bg);border-radius:var(--r-sm);font-size:11px;font-weight:800;color:var(--txt);transition:.2s;border:1px solid var(--border2)}
+.footer-social a:active{transform:scale(.95)}
+.footer-copy{font-size:10.5px;color:var(--soft);border-top:1px solid var(--border2);padding-top:14px}
+.footer-copy a{color:var(--blue);font-weight:800}
+
+/* TUTORIAL */
+.tutorial-card{background:#fff;border-radius:var(--r-lg);border:1px solid var(--border2);overflow:hidden;margin-bottom:14px;box-shadow:var(--shadow-sm);cursor:pointer;transition:.2s}
+.tutorial-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.tutorial-thumb{width:100%;height:180px;background:var(--bg);position:relative;overflow:hidden}
+.tutorial-thumb img{width:100%;height:100%;object-fit:cover}
+.tutorial-play{position:absolute;inset:0;background:rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+.tutorial-play i{font-size:50px;color:#fff;text-shadow:0 4px 12px rgba(0,0,0,.4)}
+.tutorial-title{padding:14px;font-size:14px;font-weight:800;color:var(--text);text-align:center}
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shine 1.5s infinite;border-radius:var(--r)}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:13px;font-weight:500}
+.empty-state i{display:block;font-size:36px;opacity:.25;margin-bottom:12px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,30,63,.7);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)}
+.modal-overlay.active{display:flex;animation:fadeIn .25s ease}
+.modal-box{background:#fff;border-radius:var(--r-xl);max-width:400px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:bounceIn .35s ease}
+.modal-img{width:100%;aspect-ratio:1.6;object-fit:cover;background:var(--bg)}
+.modal-content{padding:20px}
+.modal-title{font-size:18px;font-weight:900;color:var(--dark);margin-bottom:6px;letter-spacing:-.3px}
+.modal-desc{font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.modal-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.modal-chip{padding:5px 12px;border-radius:50px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;gap:5px}
+.modal-chip.target{background:var(--blue-soft);color:var(--blue)}
+.modal-chip.price{background:var(--red-grad);color:#fff;box-shadow:0 4px 12px rgba(220,38,38,.24)}
+.modal-chip.free{background:var(--green-grad);color:#fff;box-shadow:0 4px 12px rgba(22,163,74,.28)}
+.modal-chip.progress{background:var(--gold-grad);color:#3a2400}
+
+/* FORM MODAL */
+.form-modal-head{padding:18px 20px 14px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border2)}
+.form-modal-icon{width:40px;height:40px;border-radius:12px;background:var(--blue-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;box-shadow:var(--shadow-blue)}
+.form-modal-title{font-size:15px;font-weight:900;color:var(--dark);letter-spacing:-.2px}
+.form-modal-sub{font-size:11px;color:var(--muted);margin-top:2px;font-weight:500}
+.form-modal-close{margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--bg);border:none;color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.form-modal-close:active{transform:scale(.92)}
+.form-modal-body{padding:20px}
+.form-modal-foot{padding:14px 20px;border-top:1px solid var(--border2);display:flex;gap:10px}
+.pwd-wrap{position:relative}
+.pwd-wrap .input-field{padding-right:44px}
+.pwd-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--muted);font-size:14px;cursor:pointer;padding:6px;border-radius:6px;transition:.15s}
+.pwd-toggle:active{transform:translateY(-50%) scale(.9)}
+.pwd-toggle:hover{color:var(--blue)}
+.form-modal-btn{flex:1;padding:13px;border-radius:var(--r);border:none;font-weight:800;font-size:13.5px;cursor:pointer;font-family:inherit;transition:.15s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.form-modal-btn:active{transform:scale(.98)}
+.form-modal-btn.primary{background:var(--blue-grad);color:#fff;box-shadow:var(--shadow-blue)}
+.form-modal-btn.cancel{background:var(--bg);color:var(--txt)}
+.form-modal-btn.danger{background:var(--red-grad);color:#fff;box-shadow:0 6px 18px rgba(220,38,38,.28)}
+
+/* NOTIFICATIONS PANEL */
+.notif-panel{background:#fff;border-radius:var(--r-xl);max-width:420px;width:100%;max-height:82vh;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);animation:bounceIn .35s ease;display:flex;flex-direction:column}
+.notif-head{padding:16px 18px;background:linear-gradient(135deg,#0a1e3f,#132a52);display:flex;align-items:center;gap:11px;position:relative;overflow:hidden}
+.notif-head::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(46,111,242,.3),transparent 70%)}
+.notif-head-icon{width:38px;height:38px;border-radius:12px;background:rgba(251,191,36,.18);color:#fbbf24;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;position:relative;z-index:1;border:1px solid rgba(251,191,36,.3)}
+.notif-head-title{font-size:15px;font-weight:900;color:#fff;letter-spacing:-.2px;position:relative;z-index:1}
+.notif-head-sub{font-size:10.5px;color:rgba(255,255,255,.55);margin-top:2px;font-weight:600;position:relative;z-index:1}
+.notif-head-close{margin-left:auto;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.notif-head-close:active{transform:scale(.92)}
+.notif-body{flex:1;overflow-y:auto;padding:14px}
+.notif-item{background:#fff;border:1px solid var(--border2);border-radius:var(--r-md);padding:13px;margin-bottom:9px;display:flex;gap:11px;box-shadow:var(--shadow-xs);position:relative;overflow:hidden;border-left:4px solid var(--blue);transition:.15s}
+.notif-item:hover{transform:translateX(2px);box-shadow:var(--shadow-sm)}
+.notif-item.type-info{border-left-color:var(--blue)}
+.notif-item.type-success{border-left-color:var(--green)}
+.notif-item.type-warning{border-left-color:var(--gold)}
+.notif-item.type-error{border-left-color:var(--red)}
+.notif-item-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.notif-item.type-info .notif-item-icon{background:#dbeafe;color:#1e40af}
+.notif-item.type-success .notif-item-icon{background:#dcfce7;color:#166534}
+.notif-item.type-warning .notif-item-icon{background:#fef3c7;color:#92400e}
+.notif-item.type-error .notif-item-icon{background:#fee2e2;color:#991b1b}
+.notif-item-content{flex:1;min-width:0}
+.notif-item-title{font-size:12.5px;font-weight:800;color:var(--text);line-height:1.3}
+.notif-item-msg{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:4px;font-weight:500}
+.notif-item-time{font-size:10px;color:var(--soft);margin-top:6px;font-weight:700;display:flex;align-items:center;gap:4px}
+.notif-empty{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;font-weight:500}
+.notif-empty i{display:block;font-size:42px;opacity:.22;margin-bottom:14px}
+
+/* INSTANT PAY MODAL */
+.instant-pay-head{padding:18px 20px;background:linear-gradient(135deg,#0a1e3f,#132a52);position:relative;overflow:hidden;border-radius:var(--r-xl) var(--r-xl) 0 0}
+.instant-pay-head::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(46,111,242,.35),transparent 70%)}
+.instant-pay-title{font-size:16px;font-weight:900;color:#fff;position:relative;z-index:1;display:flex;align-items:center;gap:9px}
+.instant-pay-title i{color:#fbbf24}
+.instant-pay-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px;font-weight:600;position:relative;z-index:1}
+
+/* CUSTOM TOAST */
+#w8ToastContainer{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;gap:10px;width:92%;max-width:400px;pointer-events:none}
+.w8-toast{background:linear-gradient(135deg,#0a1e3f,#132a52);color:#fff;padding:14px 16px;border-radius:var(--r-md);font-size:13px;font-weight:600;box-shadow:0 14px 40px rgba(10,30,63,.35);display:flex;align-items:center;gap:12px;animation:toastIn .3s cubic-bezier(.34,1.56,.64,1);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}
+.w8-toast::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px}
+.w8-toast.success::before{background:linear-gradient(180deg,#22c55e,#15803d)}
+.w8-toast.error::before{background:linear-gradient(180deg,#ef4444,#991b1b)}
+.w8-toast.info::before{background:linear-gradient(180deg,#2e6ff2,#0a3d91)}
+.w8-toast.warning::before{background:linear-gradient(180deg,#fbbf24,#d97706)}
+.w8-toast-icon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.w8-toast.success .w8-toast-icon{background:rgba(34,197,94,.18);color:#4ade80}
+.w8-toast.error .w8-toast-icon{background:rgba(239,68,68,.18);color:#f87171}
+.w8-toast.info .w8-toast-icon{background:rgba(46,111,242,.2);color:#60a5fa}
+.w8-toast.warning .w8-toast-icon{background:rgba(251,191,36,.18);color:#fbbf24}
+.w8-toast-text{flex:1;min-width:0}
+.w8-toast-title{font-size:13px;font-weight:800;color:#fff;letter-spacing:.1px}
+.w8-toast-msg{font-size:11.5px;color:rgba(255,255,255,.7);margin-top:2px;font-weight:500;line-height:1.4}
+.w8-toast.out{animation:toastOut .3s ease forwards}
+
+/* CUSTOM SWEETALERT THEME */
+.swal2-popup.w8-swal{border-radius:var(--r-xl)!important;padding:26px 22px!important;font-family:'Poppins',sans-serif!important}
+.swal2-title.w8-title{font-size:20px!important;font-weight:900!important;color:var(--dark)!important;letter-spacing:-.3px!important;padding:0 0 6px!important}
+.swal2-html-container.w8-html{font-size:13.5px!important;color:var(--txt)!important;line-height:1.65!important;font-weight:500!important}
+.swal2-confirm.w8-confirm{background:var(--blue-grad)!important;color:#fff!important;font-weight:800!important;padding:12px 26px!important;border-radius:var(--r)!important;box-shadow:var(--shadow-blue)!important;font-family:'Poppins',sans-serif!important;font-size:13.5px!important;letter-spacing:.3px!important}
+.swal2-cancel.w8-cancel{background:var(--bg)!important;color:var(--txt)!important;font-weight:800!important;padding:12px 22px!important;border-radius:var(--r)!important;font-family:'Poppins',sans-serif!important;font-size:13.5px!important}
+.swal2-icon.w8-icon{margin:8px auto 14px!important;border-width:3px!important}
+.swal2-icon.swal2-success.w8-icon{border-color:#22c55e!important}
+.swal2-icon.swal2-error.w8-icon{border-color:#ef4444!important}
+.swal2-icon.swal2-warning.w8-icon{border-color:#fbbf24!important}
+.swal2-icon.swal2-info.w8-icon{border-color:#2e6ff2!important}
+.swal2-icon.swal2-question.w8-icon{border-color:#2e6ff2!important}
+</style>
+</head>
+<body>
+
+<!-- ==================== AUTH OVERLAY ==================== -->
+<div id="authOverlay" class="auth-overlay">
+<div class="auth-card">
+<div class="auth-logo-wrap">
+<div class="brand-logo-pro lg" id="authBrandLogo">
+<span class="game-highlight">GAME</span><span class="shop-text">BAZAR</span>
+</div>
+<img id="authCustomLogo" class="auth-logo-img" onerror="this.style.display='none'">
+</div>
+<div class="auth-heading">Welcome to GAME BAZAR</div>
+<div class="auth-sub">Bangladesh's Premium Top Up Service</div>
+
+<div class="auth-toggle">
+<button id="authLoginTab" class="active" onclick="switchAuth('login')">Sign In</button>
+<button id="authRegTab" onclick="switchAuth('register')">Sign Up</button>
+</div>
+
+<div id="loginForm">
+<input type="email" id="loginEmail" class="auth-input" placeholder="Email Address">
+<input type="password" id="loginPass" class="auth-input" placeholder="Password">
+<button class="auth-btn" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+</div>
+
+<div id="registerForm" class="hidden">
+<input type="text" id="regName" class="auth-input" placeholder="Full Name">
+<input type="email" id="regEmail" class="auth-input" placeholder="Email Address">
+<input type="tel" id="regPhone" class="auth-input" placeholder="Phone Number">
+<input type="password" id="regPass" class="auth-input" placeholder="Password (6+ chars)">
+<button class="auth-btn" onclick="handleRegister()"><i class="fas fa-user-plus"></i> Create Account</button>
+</div>
+
+<div class="auth-divider">Or Continue With</div>
+<button class="google-btn" onclick="handleGoogleLogin()">
+<svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+<path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+<path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+<path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+</svg>
+Continue with Google
+</button>
+</div>
+</div>
+
+<!-- ==================== APP ==================== -->
+<div id="appContent" class="hidden">
+
+<header class="app-header">
+<div class="brand-area" onclick="showSec('home')">
+<img id="brandLogo" class="brand-logo-img" onerror="this.style.display='none';">
+<span class="header-app-name" id="headerAppName">GAME BAZAR</span>
+<span class="header-app-name-badge" id="headerAppNameBadge"><i class="fas fa-crown"></i> PRO</span>
+</div>
+<div class="header-actions">
+<button id="headerLoginBtn" class="header-login-btn" onclick="document.getElementById('authOverlay').classList.remove('hidden')">Login</button>
+<div id="headerUserInfo" class="hidden" style="align-items:center;gap:7px;">
+<div class="balance-pill" onclick="showSec('addmoney')">
+<i class="fas fa-wallet"></i>
+<span id="headerBalance">0</span>
+<span class="coin-sym">৳</span>
+</div>
+<button class="header-notif-pro" id="headerNotifBtn" onclick="openNotifications()">
+<i class="fas fa-bell"></i>
+<span class="dot" id="notifCount">0</span>
+</button>
+<div id="headerAvatar" class="header-avatar" onclick="showSec('account')">U</div>
+</div>
+</div>
+</header>
+
+<div class="notice-bar-prof">
+<div class="notice-icon"><i class="fas fa-bullhorn"></i></div>
+<div style="overflow:hidden;flex:1"><div id="noticeText" class="notice-text">Welcome to GAME BAZAR — Bangladesh's Premium Top Up Service</div></div>
+</div>
+
+<main class="app-main">
+
+<section id="homeSec">
+<div class="banner-slider">
+<div id="bannerInner" class="banner-inner">
+<div class="banner-slide"><img src="https://placehold.co/600x300/0a1e3f/FFF?text=GAME BAZAR" alt="banner"></div>
+</div>
+<div id="bannerDots" class="banner-dots"></div>
+</div>
+
+<div id="servicesList">
+<div style="text-align:center;padding:40px 0;"><i class="fas fa-spinner fa-spin" style="color:var(--blue);font-size:28px;"></i><p style="color:var(--muted);font-size:13px;margin-top:10px;font-weight:600;">Loading Games...</p></div>
+</div>
+
+<div class="section-title gold"><i class="fas fa-trophy" style="color:var(--gold);font-size:14px;"></i> Top Customers <span class="badge-count" id="lbCount">0</span></div>
+<div id="leaderboardWrap"></div>
+
+<div class="section-title"><i class="fas fa-receipt" style="color:var(--blue);font-size:13px;"></i> Latest Orders</div>
+<div id="latestOrdersList">
+<div class="order-row skeleton" style="height:62px;"></div>
+<div class="order-row skeleton" style="height:62px;"></div>
+</div>
+
+<div id="promoBannerContainer" class="hidden" style="margin:16px 0;">
+<a id="promoBannerLink" href="#" target="_blank"><img id="promoBannerImg" src="" style="width:100%;border-radius:var(--r-lg);box-shadow:var(--shadow-md);display:block;"></a>
+</div>
+
+<div class="section-title"><i class="fas fa-headset" style="color:var(--blue);font-size:13px;"></i> 24/7 Support</div>
+<div class="support-card">
+<div class="support-card-head">
+<div class="support-card-icon"><i class="fas fa-headset"></i></div>
+<div>
+<div class="support-card-title">Get Instant Help</div>
+<div class="support-card-sub">Average reply time: <b>2 min</b></div>
+</div>
+</div>
+<div class="support-actions">
+<a id="supportWa" href="#" target="_blank" class="support-btn wa">
+<div class="support-btn-icon"><i class="fab fa-whatsapp"></i></div>
+<div class="support-btn-info">
+<div class="support-btn-title">WhatsApp Support</div>
+<div class="support-btn-desc"><span class="live-dot-mini"></span> Online Now · Tap to chat</div>
+</div>
+<i class="fas fa-chevron-right support-btn-arrow"></i>
+</a>
+<a id="supportTg" href="#" target="_blank" class="support-btn tg">
+<div class="support-btn-icon"><i class="fab fa-telegram"></i></div>
+<div class="support-btn-info">
+<div class="support-btn-title">Telegram Community</div>
+<div class="support-btn-desc"><span class="live-dot-mini"></span> Join Group · Fast Support</div>
+</div>
+<i class="fas fa-chevron-right support-btn-arrow"></i>
+</a>
+</div>
+</div>
+
+<div class="app-footer">
+<div class="footer-brand"><div class="brand-logo-pro sm"><span class="w8-highlight">W8</span><span class="shop-text">SHOP</span></div></div>
+<div class="footer-desc">Premium TopUp Service · Trusted in Bangladesh</div>
+<div style="background:var(--blue-soft);border:1px solid #bfdbfe;padding:11px;border-radius:var(--r);margin-bottom:14px;text-align:left;">
+<p style="font-size:11px;color:#1e40af;line-height:1.65;font-weight:500;"><i class="fas fa-info-circle" style="color:var(--blue);margin-right:5px;"></i><b>Notice:</b> For any issue, message our support with your order screenshot and payment TrxID.</p>
+</div>
+<div class="footer-social">
+<a id="fFacebook" href="#" target="_blank"><i class="fab fa-facebook-f" style="color:#1877F2;"></i> FB</a>
+<a id="fYoutube" href="#" target="_blank"><i class="fab fa-youtube" style="color:#FF0000;"></i> YT</a>
+<a id="fTelegram" href="#" target="_blank"><i class="fab fa-telegram" style="color:#0088cc;"></i> TG</a>
+<a id="fWhatsapp" href="#" target="_blank"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WA</a>
+</div>
+<div class="footer-copy">© 2026 <b>GAME BAZAR</b> · All Rights Reserved<br>Developed by <a href="https://t.me/" target="_blank">W8 Team</a></div>
+</div>
+</section>
+
+<section id="premiumSec" class="hidden">
+<div class="section-title gold"><i class="fas fa-crown" style="color:var(--gold);font-size:14px;"></i> Premium Rewards</div>
+<div class="premium-banner">
+<div class="premium-content">
+<div class="premium-icon"><i class="fas fa-crown"></i></div>
+<div class="premium-text">
+<div class="premium-title">Unlock Exclusive Products</div>
+<div class="premium-desc">Topup more, unlock premium rewards for free!</div>
+</div>
+</div>
+<div class="premium-progress-wrap">
+<div class="premium-progress-info"><span>Your Topup Progress</span><span><b id="premiumTotalTopup">৳0</b></span></div>
+<div class="premium-progress-bar"><div class="premium-progress-fill" id="premiumProgressFill" style="width:0%"></div></div>
+<div class="premium-progress-info" style="margin-top:7px;margin-bottom:0;"><span>Total Lifetime Topup</span><span id="premiumNextTier">Next: ৳0</span></div>
+</div>
+</div>
+<div id="premiumGrid" class="premium-grid">
+<div class="skeleton" style="height:200px;grid-column:1/-1;"></div>
+</div>
+</section>
+
+<section id="topupSec" class="hidden">
+<div class="topup-back">
+<div class="topup-back-btn" onclick="showSec('home')"><i class="fas fa-arrow-left"></i></div>
+<div class="topup-title" id="topupGameTitle">Game Name</div>
+</div>
+<div class="topup-game-card">
+<img id="topupGameImg" class="topup-game-img" src="">
+<div>
+<div class="topup-game-name" id="topupSubTitle">Game TopUp</div>
+<div class="topup-game-sub">Instant Delivery Service</div>
+</div>
+</div>
+
+<div id="dynamicInputsPanel" class="step-panel">
+<div class="step-panel-head"><div class="step-circle blue">1</div><div class="step-panel-title" id="dynPanelTitle">Enter Player ID</div></div>
+<div id="dynamicInputsWrap"></div>
+</div>
+
+<div class="step-panel">
+<div class="step-panel-head"><div class="step-circle blue">2</div><div class="step-panel-title">Select Recharge Package</div></div>
+<div id="productLoader" style="text-align:center;padding:20px 0;"><i class="fas fa-spinner fa-spin" style="color:var(--blue);font-size:22px;"></i></div>
+<div id="productsGrid" class="product-grid"></div>
+</div>
+
+<div class="step-panel">
+<div class="step-panel-head"><div class="step-circle dark">3</div><div class="step-panel-title">Select one option</div></div>
+
+<div class="pay-option-grid">
+<!-- Wallet Pay Card -->
+<div class="pay-option-card wallet-theme" id="optWallet" onclick="selectPayOption('wallet')">
+<img id="walletOptImg" class="pay-option-icon-img" style="display:none" src="" onerror="this.style.display='none';document.getElementById('walletFallback').style.display='flex'">
+<div class="pay-option-icon-box wallet" id="walletFallback"><i class="fas fa-wallet"></i></div>
+<div class="pay-option-label"><i class="fas fa-chevron-right"></i> Wallet Pay</div>
+<div class="pay-option-amount">Balance: <b>৳<span id="optWalletBalance">0</span></b></div>
+</div>
+
+<!-- Instant Pay Card -->
+<div class="pay-option-card instant-theme" id="optInstant" onclick="selectPayOption('instant')">
+<img id="instantOptImg" class="pay-option-icon-img" style="display:none" src="" onerror="this.style.display='none';document.getElementById('instantFallback').style.display='flex'">
+<div class="pay-option-icon-box instant" id="instantFallback"><i class="fas fa-bolt"></i></div>
+<div class="pay-option-label"><i class="fas fa-chevron-right"></i> Instant Pay</div>
+<div class="pay-option-sub-icons">
+<img id="optIcoBkash" src="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+<div class="fb bkash" style="display:none">bK</div>
+<img id="optIcoNagad" src="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+<div class="fb nagad" style="display:none">NG</div>
+<img id="optIcoRocket" src="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+<div class="fb rocket" style="display:none">RK</div>
+</div>
+</div>
+</div>
+
+<div id="instantSubWrap" class="instant-sub hidden">
+<div class="instant-sub-title">Choose Mobile Banking</div>
+<div class="instant-method-grid" id="instantMethodGrid"></div>
+</div>
+
+<div class="balance-info-row" style="margin-top:16px">
+<div class="balance-info-item">
+<i class="fas fa-info"></i>
+<span>Your account balance: <b>৳<span id="infoBalance">0.00</span></b></span>
+</div>
+<div class="balance-info-item need">
+<i class="fas fa-info"></i>
+<span>Required to buy: <b>৳<span id="infoRequired">0</span></b></span>
+</div>
+</div>
+
+<button class="btn-full btn-dark" id="buyNowBtn" onclick="buyNow()" disabled>Buy Now</button>
+</div>
+
+<div id="gameRulesBox" class="rules-box hidden">
+<h4><i class="fas fa-info-circle"></i> Rules & Conditions</h4>
+<p id="gameRulesText"></p>
+</div>
+</section>
+
+<section id="addmoneySec" class="hidden">
+<div class="section-title">Add Money</div>
+
+<div id="autoPaymentView" class="hidden">
+<div class="card-panel">
+<div style="background:var(--blue-soft);padding:12px;border-radius:var(--r);text-align:center;margin-bottom:16px;">
+<div style="font-size:11px;color:var(--blue);font-weight:800;text-transform:uppercase;letter-spacing:.5px;"><i class="fas fa-bolt"></i> Automatic Payment</div>
+</div>
+<div id="autoPaymentMethodsGrid" class="auto-method-grid"></div>
+<div id="autoPaymentFormContainer" class="hidden">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+<div style="font-size:15px;font-weight:900;color:var(--dark);" id="autoFormMethodName">Method</div>
+<button onclick="resetAutoForm()" style="background:transparent;border:none;color:var(--soft);font-size:18px;cursor:pointer;"><i class="fas fa-times"></i></button>
+</div>
+<div class="copy-wrap">
+<div class="copy-label"><i class="fas fa-phone"></i> Send Money To (Personal)</div>
+<div class="copy-row">
+<div class="copy-num" id="autoAdminNumber">...</div>
+<button class="copy-btn" onclick="copyAutoNumber()"><i class="fas fa-copy"></i> Copy</button>
+</div>
+</div>
+<div class="form-group">
+<label><i class="fas fa-receipt"></i> Transaction ID</label>
+<input type="text" id="autoDepTrx" class="input-field" placeholder="Enter Transaction ID" style="text-transform:uppercase;">
+</div>
+<button class="btn-full btn-primary" onclick="verifyAutoPayment()"><i class="fas fa-shield-alt" style="margin-right:6px;"></i> Verify Payment</button>
+</div>
+</div>
+</div>
+
+<div id="manualPaymentView" class="hidden">
+<div class="card-panel">
+<div class="step-indicator" id="stepIndicator">
+<div class="step-item active" id="si1"><div class="step-dot"><span>1</span></div><div class="step-label">Amount</div></div>
+<div class="step-line" id="sl1"></div>
+<div class="step-item" id="si2"><div class="step-dot"><span>2</span></div><div class="step-label">Method</div></div>
+<div class="step-line" id="sl2"></div>
+<div class="step-item" id="si3"><div class="step-dot"><span>3</span></div><div class="step-label">Confirm</div></div>
+</div>
+
+<div id="step1" class="step-container active">
+<div class="step-badge"><i class="fas fa-coins"></i> Step 1</div>
+<div class="step-heading">Enter Amount</div>
+<div class="step-desc">Choose a quick amount or type any value</div>
+<div class="amount-wrap"><span class="amount-currency">৳</span><input type="number" id="addAmountInput" placeholder="0" inputmode="numeric" min="1"></div>
+<div class="quick-grid">
+<button data-amt="50" onclick="pickAmt(50)">৳50</button>
+<button data-amt="100" onclick="pickAmt(100)">৳100</button>
+<button data-amt="200" onclick="pickAmt(200)">৳200</button>
+<button data-amt="500" onclick="pickAmt(500)">৳500</button>
+<button data-amt="1000" onclick="pickAmt(1000)">৳1000</button>
+</div>
+<button class="btn-full btn-primary" onclick="stepNext()">Continue <i class="fas fa-arrow-right" style="margin-left:6px;"></i></button>
+</div>
+
+<div id="step2" class="step-container">
+<div class="back-link" onclick="goStep(1)"><i class="fas fa-arrow-left"></i> Change amount</div>
+<div class="step-badge"><i class="fas fa-hand-holding-usd"></i> Step 2</div>
+<div class="step-heading">Choose Payment Method</div>
+<div class="step-desc">Select your preferred mobile banking</div>
+<div class="summary-strip">
+<div><div class="summary-label">Amount to Add</div><div class="summary-value">৳<span id="step2Amount">0</span></div></div>
+<i class="fas fa-arrow-right" style="color:var(--soft);"></i>
+</div>
+<div class="method-list" id="methodList"></div>
+</div>
+
+<div id="step3" class="step-container">
+<div class="back-link" onclick="goStep(2)"><i class="fas fa-arrow-left"></i> Change method</div>
+<div class="step-badge"><i class="fas fa-paper-plane"></i> Step 3</div>
+<div class="step-heading">Send & Confirm</div>
+<div class="step-desc">Complete the transfer and submit TrxID</div>
+<div class="pay-card">
+<div class="pay-head" id="payHead">
+<img class="pay-logo" id="payLogo" src="">
+<div class="pay-amount">৳<span id="payAmount">0</span></div>
+<div class="pay-sub">Send to <b id="payMethodName">bKash</b><span class="pay-chip"><i class="fas fa-user"></i> <span id="payMethodType">Personal</span></span></div>
+</div>
+</div>
+<div class="copy-wrap">
+<div class="copy-label"><i class="fas fa-phone"></i> Send Money To (Tap to copy)</div>
+<div class="copy-row">
+<div class="copy-num" id="payNumberDisplay">—</div>
+<button class="copy-btn" id="payCopyBtn" onclick="copyPayNumber()"><i class="fas fa-copy"></i> Copy</button>
+</div>
+</div>
+<ul class="instr-list" id="instructionList"></ul>
+<div class="form-group">
+<label><i class="fas fa-mobile-alt"></i> Your Sender Number <span class="req">*</span></label>
+<input type="tel" id="paySender" class="input-field" placeholder="01XXXXXXXXX" inputmode="numeric">
+</div>
+<div class="form-group">
+<label><i class="fas fa-receipt"></i> Transaction ID (TrxID) <span class="req">*</span></label>
+<input type="text" id="payTrx" class="input-field" placeholder="e.g. 9A4B8C1D3E" style="text-transform:uppercase;">
+</div>
+<button class="btn-full btn-primary" id="paySubmitBtn" onclick="submitDeposit()"><i class="fas fa-paper-plane" style="margin-right:6px;"></i> Submit Deposit Request</button>
+<p style="text-align:center;font-size:11px;color:var(--muted);margin-top:12px;line-height:1.6;"><i class="fas fa-shield-alt"></i> Verified within minutes</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="tutorialSec" class="hidden">
+<div class="section-title">Video Tutorials</div>
+<div id="tutorialList"></div>
+</section>
+
+<section id="accountSec" class="hidden">
+<div class="card-panel">
+<div class="profile-head">
+<div class="profile-avatar" id="profileAvatar">U</div>
+<div class="profile-name" id="profileName">User Name</div>
+<div class="profile-email" id="profileEmail">user@email.com</div>
+<div id="profileTag" class="profile-tag tag-user"><i class="fas fa-user"></i> Member</div>
+</div>
+<div class="stat-grid">
+<div class="stat-box"><i class="fas fa-wallet stat-box-bal"></i><div class="stat-box-val">৳<span id="profileBalance">0</span></div><div class="stat-box-label">Balance</div></div>
+<div class="stat-box"><i class="fas fa-arrow-circle-up stat-box-top"></i><div class="stat-box-val">৳<span id="profileTotalTopup">0</span></div><div class="stat-box-label">Lifetime Topup</div></div>
+<div class="stat-box"><i class="fas fa-shopping-bag stat-box-ord"></i><div class="stat-box-val" id="profileOrders">0</div><div class="stat-box-label">Total Orders</div></div>
+<div class="stat-box"><i class="fas fa-coins stat-box-spent"></i><div class="stat-box-val">৳<span id="profileSpent">0</span></div><div class="stat-box-label">Total Spent</div></div>
+</div>
+</div>
+
+<div class="profile-info-card">
+<div class="profile-info-head">
+<i class="fas fa-id-card"></i>
+<div class="profile-info-head-title">Personal Information</div>
+<button class="profile-info-head-edit" onclick="openEditProfile()"><i class="fas fa-pen"></i> Edit</button>
+</div>
+<div class="profile-info-body">
+<div class="info-row">
+<div class="info-icon blue"><i class="fas fa-user"></i></div>
+<div class="info-content"><div class="info-label">Full Name</div><div class="info-value" id="infoName">—</div></div>
+</div>
+<div class="info-row">
+<div class="info-icon green"><i class="fas fa-envelope"></i></div>
+<div class="info-content"><div class="info-label">Email Address</div><div class="info-value" id="infoEmail">—</div></div>
+</div>
+<div class="info-row">
+<div class="info-icon purple"><i class="fas fa-phone"></i></div>
+<div class="info-content"><div class="info-label">Phone Number</div><div class="info-value" id="infoPhone">—</div></div>
+</div>
+<div class="info-row">
+<div class="info-icon gold"><i class="fas fa-calendar-alt"></i></div>
+<div class="info-content"><div class="info-label">Member Since</div><div class="info-value" id="infoJoined">—</div></div>
+</div>
+<div class="info-row">
+<div class="info-icon silver"><i class="fas fa-fingerprint"></i></div>
+<div class="info-content"><div class="info-label">User ID</div><div class="info-value mono" id="infoUid">—</div></div>
+</div>
+<div class="info-row">
+<div class="info-icon red"><i class="fas fa-shield-alt"></i></div>
+<div class="info-content"><div class="info-label">Account Provider</div><div class="info-value" id="infoProvider">Email</div></div>
+</div>
+</div>
+</div>
+
+<div class="menu-list">
+<div class="menu-item" onclick="openEditProfile()"><div class="menu-icon blue"><i class="fas fa-user-edit"></i></div><div class="menu-text">Edit Profile</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="openChangePassword()"><div class="menu-icon red"><i class="fas fa-key"></i></div><div class="menu-text">Change Password</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="showSec('premium')"><div class="menu-icon gold"><i class="fas fa-crown"></i></div><div class="menu-text">Premium Rewards</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="showSec('history')"><div class="menu-icon blue"><i class="fas fa-shopping-bag"></i></div><div class="menu-text">My Orders</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="showSec('addmoney')"><div class="menu-icon green"><i class="fas fa-plus-circle"></i></div><div class="menu-text">Add Money</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="showSec('tutorial')"><div class="menu-icon purple"><i class="fas fa-play-circle"></i></div><div class="menu-text">Video Tutorials</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="openSupport()"><div class="menu-icon yellow"><i class="fas fa-headset"></i></div><div class="menu-text">Contact Support</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+<div class="menu-item" onclick="handleLogout()" style="color:var(--red);"><div class="menu-icon red"><i class="fas fa-sign-out-alt"></i></div><div class="menu-text" style="color:var(--red);">Log Out</div><i class="fas fa-chevron-right menu-arrow"></i></div>
+</div>
+</section>
+
+<section id="historySec" class="hidden">
+<div class="section-title">Order History</div>
+<div id="historyList"></div>
+</section>
+
+</main>
+
+<div class="fab-wrap" id="fabWrap">
+<div class="fab-label">Need Help?</div>
+<div class="fab-main-wrap">
+<div class="fab-options">
+<a id="fabWa" href="#" target="_blank" class="fab-option wa"><div class="ico"><i class="fab fa-whatsapp"></i></div> WhatsApp</a>
+<a id="fabTg" href="#" target="_blank" class="fab-option tg"><div class="ico"><i class="fab fa-telegram"></i></div> Telegram</a>
+</div>
+<button class="fab-main" onclick="toggleFab()"><i class="fas fa-headset"></i></button>
+</div>
+</div>
+
+<div id="premiumModal" class="modal-overlay">
+<div class="modal-box">
+<img id="pmImg" class="modal-img" src="">
+<div class="modal-content">
+<div class="modal-title" id="pmTitle">Product</div>
+<div class="modal-desc" id="pmDesc">Description</div>
+<div class="modal-meta" id="pmMeta"></div>
+<button id="pmActionBtn" class="btn-full btn-primary" onclick="pmAction()"><i class="fas fa-bolt"></i> Continue</button>
+<button class="btn-full" style="background:var(--bg);color:var(--txt);margin-top:8px;box-shadow:none;" onclick="closePremiumModal()">Close</button>
+</div>
+</div>
+</div>
+
+<!-- INSTANT PAY FORM MODAL -->
+<div id="instantPayModal" class="modal-overlay">
+<div class="modal-box">
+<div class="instant-pay-head">
+<div class="instant-pay-title" id="ipTitle"><i class="fas fa-bolt"></i> Instant Pay</div>
+<div class="instant-pay-sub" id="ipSub">Complete payment to proceed</div>
+</div>
+<div class="modal-content">
+<div class="pay-card" style="margin-bottom:14px">
+<div class="pay-head" id="ipPayHead">
+<img class="pay-logo" id="ipPayLogo" src="">
+<div class="pay-amount">৳<span id="ipPayAmount">0</span></div>
+<div class="pay-sub">Send to <b id="ipMethodName">bKash</b><span class="pay-chip"><i class="fas fa-user"></i> <span id="ipMethodType">Personal</span></span></div>
+</div>
+</div>
+<div class="copy-wrap">
+<div class="copy-label"><i class="fas fa-phone"></i> Send Money To (Tap to copy)</div>
+<div class="copy-row">
+<div class="copy-num" id="ipNumberDisplay">—</div>
+<button class="copy-btn" id="ipCopyBtn" onclick="copyIpNumber()"><i class="fas fa-copy"></i> Copy</button>
+</div>
+</div>
+<ul class="instr-list" id="ipInstructionList"></ul>
+<div class="form-group">
+<label><i class="fas fa-mobile-alt"></i> Your Sender Number <span class="req">*</span></label>
+<input type="tel" id="ipSender" class="input-field" placeholder="01XXXXXXXXX" inputmode="numeric">
+</div>
+<div class="form-group">
+<label><i class="fas fa-receipt"></i> Transaction ID (TrxID) <span class="req">*</span></label>
+<input type="text" id="ipTrx" class="input-field" placeholder="e.g. 9A4B8C1D3E" style="text-transform:uppercase;">
+</div>
+<div class="form-modal-foot" style="padding:0;border:none;margin-top:6px">
+<button class="form-modal-btn cancel" onclick="closeInstantPayModal()">Cancel</button>
+<button class="form-modal-btn primary" id="ipSubmitBtn" onclick="submitInstantPay()"><i class="fas fa-paper-plane"></i> Submit Order</button>
+</div>
+</div>
+</div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div id="editProfileModal" class="modal-overlay">
+<div class="modal-box">
+<div class="form-modal-head">
+<div class="form-modal-icon"><i class="fas fa-user-edit"></i></div>
+<div>
+<div class="form-modal-title">Edit Profile</div>
+<div class="form-modal-sub">Update your personal information</div>
+</div>
+<button class="form-modal-close" onclick="closeEditProfile()"><i class="fas fa-times"></i></button>
+</div>
+<div class="form-modal-body">
+<div class="form-group">
+<label><i class="fas fa-user"></i> Full Name</label>
+<input type="text" id="editName" class="input-field" placeholder="Enter your full name">
+</div>
+<div class="form-group">
+<label><i class="fas fa-phone"></i> Phone Number</label>
+<input type="tel" id="editPhone" class="input-field" placeholder="01XXXXXXXXX" inputmode="numeric">
+</div>
+<div class="form-group">
+<label><i class="fas fa-envelope"></i> Email Address</label>
+<input type="email" id="editEmail" class="input-field" disabled style="background:var(--bg);color:var(--muted);cursor:not-allowed;">
+<div style="font-size:10px;color:var(--muted);margin-top:5px;font-weight:600"><i class="fas fa-lock"></i> Email cannot be changed</div>
+</div>
+<div class="form-group">
+<label><i class="fas fa-image"></i> Profile Photo URL (Optional)</label>
+<input type="text" id="editPhoto" class="input-field" placeholder="https://i.ibb.co/...">
+</div>
+</div>
+<div class="form-modal-foot">
+<button class="form-modal-btn cancel" onclick="closeEditProfile()">Cancel</button>
+<button class="form-modal-btn primary" id="editProfileSaveBtn" onclick="saveProfileEdit()"><i class="fas fa-save"></i> Save Changes</button>
+</div>
+</div>
+</div>
+
+<!-- CHANGE PASSWORD MODAL -->
+<div id="changePasswordModal" class="modal-overlay">
+<div class="modal-box">
+<div class="form-modal-head">
+<div class="form-modal-icon" style="background:var(--red-grad);box-shadow:0 8px 24px rgba(220,38,38,.28)"><i class="fas fa-key"></i></div>
+<div>
+<div class="form-modal-title">Change Password</div>
+<div class="form-modal-sub">Keep your account secure</div>
+</div>
+<button class="form-modal-close" onclick="closeChangePassword()"><i class="fas fa-times"></i></button>
+</div>
+<div class="form-modal-body">
+<div class="form-group">
+<label><i class="fas fa-lock"></i> Current Password <span class="req">*</span></label>
+<div class="pwd-wrap">
+<input type="password" id="pwdOld" class="input-field" placeholder="Enter current password">
+<button class="pwd-toggle" onclick="togglePwdField('pwdOld',this)"><i class="fas fa-eye"></i></button>
+</div>
+</div>
+<div class="form-group">
+<label><i class="fas fa-key"></i> New Password <span class="req">*</span></label>
+<div class="pwd-wrap">
+<input type="password" id="pwdNew" class="input-field" placeholder="At least 6 characters">
+<button class="pwd-toggle" onclick="togglePwdField('pwdNew',this)"><i class="fas fa-eye"></i></button>
+</div>
+</div>
+<div class="form-group">
+<label><i class="fas fa-check-circle"></i> Confirm New Password <span class="req">*</span></label>
+<div class="pwd-wrap">
+<input type="password" id="pwdConfirm" class="input-field" placeholder="Re-enter new password">
+<button class="pwd-toggle" onclick="togglePwdField('pwdConfirm',this)"><i class="fas fa-eye"></i></button>
+</div>
+</div>
+<div style="background:var(--blue-soft);border:1px solid #bfdbfe;padding:11px 13px;border-radius:var(--r);margin-top:6px;">
+<p style="font-size:11px;color:#1e40af;line-height:1.6;font-weight:500;display:flex;gap:8px;align-items:flex-start;"><i class="fas fa-info-circle" style="color:var(--blue);font-size:13px;margin-top:1px;"></i><span>Password bhule gele, support e message dio — admin panel theke password reset email pathiye deya hobe.</span></p>
+</div>
+</div>
+<div class="form-modal-foot">
+<button class="form-modal-btn cancel" onclick="closeChangePassword()">Cancel</button>
+<button class="form-modal-btn danger" id="pwdSaveBtn" onclick="savePasswordChange()"><i class="fas fa-shield-alt"></i> Update Password</button>
+</div>
+</div>
+</div>
+
+<!-- NOTIFICATIONS PANEL -->
+<div id="notificationsModal" class="modal-overlay">
+<div class="notif-panel">
+<div class="notif-head">
+<div class="notif-head-icon"><i class="fas fa-bell"></i></div>
+<div>
+<div class="notif-head-title">Notifications</div>
+<div class="notif-head-sub">Stay updated with GAME BAZAR</div>
+</div>
+<button class="notif-head-close" onclick="closeNotifications()"><i class="fas fa-times"></i></button>
+</div>
+<div class="notif-body" id="notifBody">
+<div class="notif-empty"><i class="fas fa-inbox"></i>Loading notifications...</div>
+</div>
+</div>
+</div>
+
+<nav class="bottom-nav">
+<button class="nav-item active" id="navHome" onclick="showSec('home')"><i class="fas fa-home"></i><span>Home</span></button>
+<button class="nav-item" id="navPremium" onclick="showSec('premium')"><i class="fas fa-crown"></i><span>Premium</span></button>
+<button class="nav-item" id="navAddmoney" onclick="showSec('addmoney')"><i class="fas fa-wallet"></i><span>Add Money</span></button>
+<button class="nav-item" id="navHistory" onclick="showSec('history')"><i class="fas fa-shopping-bag"></i><span>Orders</span></button>
+<button class="nav-item" id="navAccount" onclick="showSec('account')"><i class="fas fa-user"></i><span>Account</span></button>
+</nav>
+</div>
+
+<div id="w8ToastContainer"></div>
+
+<script>
+/* ============================================================
+   FIREBASE
+   ============================================================ */
+const firebaseConfig = {
+  apiKey: "AIzaSyDqF9jRpeDLMlqi1aM_JE9rlUnsleMNHfQ",
+  authDomain: "game-bazar-bd-bb805.firebaseapp.com",
+  databaseURL: "https://game-bazar-bd-bb805-default-rtdb.firebaseio.com",
+  projectId: "game-bazar-bd-bb805",
+  storageBucket: "game-bazar-bd-bb805.firebasestorage.app",
+  messagingSenderId: "198396618737",
+  appId: "1:198396618737:web:01d560fc9b6b112d05c650"
+};
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const auth=firebase.auth();
+const rtdb=firebase.database();
+const googleProvider=new firebase.auth.GoogleAuthProvider();
+
+/* ============================================================
+   TOAST SYSTEM
+   ============================================================ */
+function showToast(type,title,msg,duration=3500){
+const container=document.getElementById('w8ToastContainer');
+const icons={success:'fa-check-circle',error:'fa-times-circle',info:'fa-info-circle',warning:'fa-exclamation-triangle'};
+const t=document.createElement('div');
+t.className='w8-toast '+type;
+t.innerHTML=`<div class="w8-toast-icon"><i class="fas ${icons[type]||icons.info}"></i></div><div class="w8-toast-text"><div class="w8-toast-title">${title}</div>${msg?`<div class="w8-toast-msg">${msg}</div>`:''}</div>`;
+container.appendChild(t);
+setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),300);},duration);
+}
+window.showToast=showToast;
+
+/* ============================================================
+   SWEETALERT WRAPPER
+   ============================================================ */
+function w8Alert(opts){return Swal.fire({...opts,customClass:{popup:'w8-swal',title:'w8-title',htmlContainer:'w8-html',confirmButton:'w8-confirm',cancelButton:'w8-cancel',icon:'w8-icon'},buttonsStyling:false});}
+function w8Success(title,msg){return w8Alert({icon:'success',title:title,html:msg||'',confirmButtonText:'Got it'});}
+function w8Error(title,msg){return w8Alert({icon:'error',title:title,html:msg||'',confirmButtonText:'OK'});}
+function w8Confirm(title,msg,confirmText='Confirm'){return w8Alert({icon:'question',title:title,html:msg||'',showCancelButton:true,confirmButtonText:confirmText,cancelButtonText:'Cancel'});}
+function w8Loading(title='Processing...'){return Swal.fire({title:title,html:'<div style="display:flex;justify-content:center;gap:6px;margin-top:10px;"><span style="width:10px;height:10px;background:#1a56db;border-radius:50%;animation:pulse 1s infinite;"></span><span style="width:10px;height:10px;background:#1a56db;border-radius:50%;animation:pulse 1s infinite .15s;"></span><span style="width:10px;height:10px;background:#1a56db;border-radius:50%;animation:pulse 1s infinite .3s;"></span></div>',allowOutsideClick:false,showConfirmButton:false,customClass:{popup:'w8-swal',title:'w8-title'}});}
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let currentUser=null;
+let currentUserData=null;
+let userBalance=0;
+let userTotalTopup=0;
+let selectedProduct=null;
+let selectedGameId=null;
+let selectedGameName="";
+let selectedGameType='uid';
+let selectedGameData=null;
+let gamesData={};
+let isAutoPayEnabled=false;
+let isLoggedIn=false;
+let appSettings={};
+let paymentMethods={};
+let pendingAmount=0;
+let pendingMethod=null;
+let allLeaderboardData=[];
+let allPremiumProducts=[];
+let currentPmProduct=null;
+let notifUnsubscribe=null;
+let selectedPayOption=null;
+let selectedInstantMethod=null;
+let pendingOrderData=null;
+
+const PAYMENT_CONFIG={
+bkash:{name:'bKash',key:'bkash',ussd:'*247#',app:'bKash',verify:'bKash SMS',defaultImg:'https://freelogopng.com/images/all_img/1656234745bkash-app-logo-png.png'},
+nagad:{name:'Nagad',key:'nagad',ussd:'*167#',app:'Nagad',verify:'Nagad SMS',defaultImg:'https://freepnglogo.com/images/all_img/1679248787Nagad-Logo.png'},
+rocket:{name:'Rocket',key:'rocket',ussd:'*322#',app:'Rocket',verify:'Rocket SMS',defaultImg:'https://seeklogo.com/images/R/rocket-logo-30AF2B8ECB-seeklogo.com.png'}
+};
+
+/* ============================================================
+   HELPER - Display Name
+   ============================================================ */
+function getDisplayName(userData, fallbackEmail){
+if(!userData) userData={};
+const name=(userData.name||'').toString().trim();
+if(name && !name.includes('@') && name.length>0) return name;
+if(userData.email && userData.email.includes('@')){const local=userData.email.split('@')[0];return local.charAt(0).toUpperCase()+local.slice(1);}
+if(fallbackEmail && fallbackEmail.includes('@')){const local=fallbackEmail.split('@')[0];return local.charAt(0).toUpperCase()+local.slice(1);}
+return 'User';
+}
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+function switchAuth(tab){
+document.getElementById('authLoginTab').classList.toggle('active',tab==='login');
+document.getElementById('authRegTab').classList.toggle('active',tab==='register');
+document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
+document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
+}
+function handleLogin(){
+const e=document.getElementById('loginEmail').value.trim();
+const p=document.getElementById('loginPass').value;
+if(!e||!p){showToast('warning','Missing Fields','Please fill email and password.');return;}
+w8Loading('Signing in...');
+auth.signInWithEmailAndPassword(e,p).then(()=>{Swal.close();showToast('success','Welcome Back','You have successfully signed in.');}).catch(err=>{Swal.close();w8Error('Login Failed',err.message);});
+}
+function handleRegister(){
+const n=document.getElementById('regName').value.trim();
+const e=document.getElementById('regEmail').value.trim();
+const ph=document.getElementById('regPhone').value.trim();
+const p=document.getElementById('regPass').value;
+if(!n||!e||!p){showToast('warning','Missing Fields','Please fill all required fields.');return;}
+if(p.length<6){showToast('warning','Weak Password','Password must be at least 6 characters.');return;}
+w8Loading('Creating your account...');
+auth.createUserWithEmailAndPassword(e,p).then(cred=>{
+return db.collection('users').doc(cred.user.uid).set({name:n,email:e,phone:ph||'',balance:0,totalTopup:0,createdAt:new Date()});
+}).then(()=>{Swal.close();showToast('success','Account Created','Welcome to GAME BAZAR!');}).catch(err=>{Swal.close();w8Error('Registration Failed',err.message);});
+}
+function handleGoogleLogin(){
+w8Loading('Connecting to Google...');
+auth.signInWithPopup(googleProvider).then(result=>{
+const user=result.user;
+return db.collection('users').doc(user.uid).get().then(doc=>{
+if(!doc.exists){return db.collection('users').doc(user.uid).set({name:user.displayName||'User',email:user.email,phone:user.phoneNumber||'',photoURL:user.photoURL||'',balance:0,totalTopup:0,createdAt:new Date(),provider:'google'});}
+});
+}).then(()=>{Swal.close();showToast('success','Welcome','Signed in with Google successfully.');}).catch(err=>{
+Swal.close();
+if(err.code==='auth/popup-closed-by-user'){showToast('info','Cancelled','Google sign-in was cancelled.');}
+else{w8Error('Google Sign-In Failed',err.message);}
+});
+}
+function handleLogout(){
+w8Confirm('Sign Out?','You will need to sign in again to access your account.','Sign Out').then(r=>{
+if(r.isConfirmed){
+auth.signOut().then(()=>{
+isLoggedIn=false;
+if(notifUnsubscribe){notifUnsubscribe();notifUnsubscribe=null;}
+document.getElementById('authOverlay').classList.remove('hidden');
+document.getElementById('appContent').classList.add('hidden');
+showToast('success','Signed Out','You have been signed out successfully.');
+});
+}
+});
+}
+auth.onAuthStateChanged(user=>{
+if(user){
+currentUser=user;isLoggedIn=true;
+document.getElementById('authOverlay').classList.add('hidden');
+document.getElementById('appContent').classList.remove('hidden');
+document.getElementById('headerLoginBtn').style.display='none';
+document.getElementById('headerUserInfo').style.display='flex';
+loadUserData(user.uid);
+loadUserStats(user.uid);
+loadAppContent();
+loadNotifications();
+}else{
+currentUser=null;currentUserData=null;isLoggedIn=false;
+if(notifUnsubscribe){notifUnsubscribe();notifUnsubscribe=null;}
+document.getElementById('authOverlay').classList.remove('hidden');
+document.getElementById('appContent').classList.add('hidden');
+document.getElementById('headerLoginBtn').style.display='block';
+document.getElementById('headerUserInfo').style.display='none';
+}
+});
+
+/* ============================================================
+   USER DATA
+   ============================================================ */
+function loadUserData(uid){
+db.collection('users').doc(uid).onSnapshot(doc=>{
+if(doc.exists){
+const d=doc.data();
+currentUserData=d;
+userBalance=d.balance||0;
+document.getElementById('headerBalance').innerText=userBalance;
+document.getElementById('profileBalance').innerText=userBalance;
+const wb=document.getElementById('optWalletBalance');
+if(wb) wb.innerText=userBalance;
+const ib=document.getElementById('infoBalance');
+if(ib) ib.innerText=Number(userBalance).toFixed(2);
+const displayName=getDisplayName(d,currentUser?currentUser.email:'');
+document.getElementById('profileName').innerText=displayName;
+document.getElementById('profileEmail').innerText=d.email||(currentUser?currentUser.email:'');
+const initial=displayName.charAt(0).toUpperCase();
+
+const ha=document.getElementById('headerAvatar');
+if(d.photoURL){ha.innerHTML=`<img src="${d.photoURL}" alt="avatar">`;}else{ha.innerText=initial;}
+
+const pa=document.getElementById('profileAvatar');
+if(d.photoURL){pa.innerHTML=`<img src="${d.photoURL}" alt="avatar">`;}else{pa.innerText=initial;}
+
+document.getElementById('infoName').innerText=displayName;
+document.getElementById('infoEmail').innerText=d.email||'—';
+document.getElementById('infoPhone').innerText=d.phone||'Not set';
+document.getElementById('infoUid').innerText=uid;
+let joined='—';
+if(d.createdAt){
+try{const dt=d.createdAt.toDate?d.createdAt.toDate():new Date(d.createdAt);joined=dt.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});}catch(e){joined='—';}
+}else if(currentUser&&currentUser.metadata&&currentUser.metadata.creationTime){
+try{joined=new Date(currentUser.metadata.creationTime).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});}catch(e){}
+}
+document.getElementById('infoJoined').innerText=joined;
+let provider='Email';
+if(currentUser&&currentUser.providerData&&currentUser.providerData[0]){
+const p=currentUser.providerData[0].providerId;
+if(p==='google.com') provider='Google';
+else if(p==='password') provider='Email / Password';
+else provider=p;
+}
+document.getElementById('infoProvider').innerText=provider;
+}
+});
+}
+function loadUserStats(uid){
+document.getElementById('profileOrders').innerText="...";
+document.getElementById('profileSpent').innerText="...";
+db.collection('orders').where('userId','==',uid).get().then(snap=>{
+let o=0,s=0;
+snap.forEach(doc=>{const d=doc.data();o++;const st=(d.status||'').toLowerCase();if(['success','complete','completed'].includes(st)) s+=parseInt(d.price||0);});
+document.getElementById('profileOrders').innerText=o;
+document.getElementById('profileSpent').innerText=s;
+}).catch(()=>{document.getElementById('profileOrders').innerText="0";document.getElementById('profileSpent').innerText="0";});
+}
+
+/* ============================================================
+   LEADERBOARD
+   ============================================================ */
+async function loadTotalTopupAndLeaderboard(){
+const depositsSnap=await db.collection('deposits').get();
+const usersMap={};
+depositsSnap.forEach(doc=>{
+const d=doc.data();
+const st=(d.status||'').toLowerCase();
+if(['approved','success'].includes(st)){
+const uid=d.userId;
+if(!usersMap[uid]) usersMap[uid]={uid,total:0,email:d.userEmail||''};
+usersMap[uid].total+=parseInt(d.amount||0);
+}
+});
+const leaderboard=[];
+for(const uid in usersMap){
+try{
+const udoc=await db.collection('users').doc(uid).get();
+let uname='User';let photo='';
+if(udoc.exists){
+const ud=udoc.data();
+const nm=(ud.name||'').toString().trim();
+if(nm && !nm.includes('@')){uname=nm;}
+else if(ud.email && ud.email.includes('@')){const local=ud.email.split('@')[0];uname=local.charAt(0).toUpperCase()+local.slice(1);}
+else if(usersMap[uid].email && usersMap[uid].email.includes('@')){const local=usersMap[uid].email.split('@')[0];uname=local.charAt(0).toUpperCase()+local.slice(1);}
+photo=ud.photoURL||'';
+}
+leaderboard.push({uid,name:uname,total:usersMap[uid].total,email:usersMap[uid].email,photo:photo});
+}catch(e){}
+}
+leaderboard.sort((a,b)=>b.total-a.total);
+allLeaderboardData=leaderboard.slice(0,10);
+document.getElementById('lbCount').innerText=allLeaderboardData.length;
+renderLeaderboard();
+
+if(currentUser){
+const myTotal=usersMap[currentUser.uid]?usersMap[currentUser.uid].total:0;
+userTotalTopup=myTotal;
+document.getElementById('premiumTotalTopup').innerText='৳'+myTotal;
+document.getElementById('profileTotalTopup').innerText=myTotal;
+updatePremiumGrid();
+const tag=document.getElementById('profileTag');
+if(tag){
+if(myTotal>=5000){tag.className='profile-tag tag-premium';tag.innerHTML='<i class="fas fa-crown"></i> VIP Member';}
+else if(myTotal>=1000){tag.className='profile-tag tag-premium';tag.innerHTML='<i class="fas fa-star"></i> Gold Member';}
+else if(myTotal>=100){tag.className='profile-tag tag-user';tag.innerHTML='<i class="fas fa-check-circle"></i> Active Member';}
+else{tag.className='profile-tag tag-user';tag.innerHTML='<i class="fas fa-user"></i> Member';}
+}
+}
+}
+function renderLeaderboard(){
+const wrap=document.getElementById('leaderboardWrap');
+if(!wrap) return;
+if(!allLeaderboardData.length){
+wrap.innerHTML=`<div class="leaderboard-wrap"><div class="lb-head"><div class="lb-head-title"><i class="fas fa-trophy"></i> Top Customers</div><div class="lb-head-sub">Leaderboard starts when users begin topping up</div></div><div style="text-align:center;padding:30px 0;color:rgba(255,255,255,.5);font-size:13px;"><i class="fas fa-trophy" style="font-size:40px;opacity:.3;display:block;margin-bottom:12px;"></i>No data yet</div></div>`;
+return;
+}
+const top1=allLeaderboardData[0]||null;
+const top2=allLeaderboardData[1]||null;
+const top3=allLeaderboardData[2]||null;
+const rest=allLeaderboardData.slice(3);
+function avatarHtml(u){
+if(u&&u.photo){return `<img src="${u.photo}" alt="${u.name}" onerror="this.parentElement.innerText='${(u.name||'U').charAt(0).toUpperCase()}'">`;}
+return (u&&u.name?u.name:'U').charAt(0).toUpperCase();
+}
+let html='<div class="leaderboard-wrap">';
+html+='<div class="lb-head"><div class="lb-head-title"><i class="fas fa-crown"></i> Top Customers</div><div class="lb-head-sub">Ranked by total lifetime topup amount</div></div>';
+html+='<div class="podium">';
+if(top2){html+=`<div class="podium-item rank2"><div class="avatar-wrap"><div class="podium-avatar">${avatarHtml(top2)}</div><div class="rank-badge">2</div></div><div class="podium-name">${top2.name||'User'}</div><div class="podium-amount">৳${top2.total.toLocaleString()}</div><div class="podium-base"></div></div>`;}
+else html+='<div class="podium-item rank2" style="opacity:.3"><div class="avatar-wrap"><div class="podium-avatar">-</div></div><div class="podium-name">Empty</div><div class="podium-amount">৳0</div><div class="podium-base"></div></div>';
+if(top1){html+=`<div class="podium-item rank1"><div class="avatar-wrap"><i class="fas fa-crown crown-badge"></i><div class="podium-avatar">${avatarHtml(top1)}</div><div class="rank-badge">1</div></div><div class="podium-name">${top1.name||'User'}</div><div class="podium-amount">৳${top1.total.toLocaleString()}</div><div class="podium-base"></div></div>`;}
+if(top3){html+=`<div class="podium-item rank3"><div class="avatar-wrap"><div class="podium-avatar">${avatarHtml(top3)}</div><div class="rank-badge">3</div></div><div class="podium-name">${top3.name||'User'}</div><div class="podium-amount">৳${top3.total.toLocaleString()}</div><div class="podium-base"></div></div>`;}
+else html+='<div class="podium-item rank3" style="opacity:.3"><div class="avatar-wrap"><div class="podium-avatar">-</div></div><div class="podium-name">Empty</div><div class="podium-amount">৳0</div><div class="podium-base"></div></div>';
+html+='</div>';
+if(rest.length){
+html+='<div class="lb-rest">';
+rest.forEach((u,i)=>{
+html+=`<div class="lb-rest-row"><div class="lb-rest-rank">${i+4}</div><div class="lb-rest-avatar">${avatarHtml(u)}</div><div class="lb-rest-info"><div class="lb-rest-name">${u.name||'User'}</div><div class="lb-rest-sub">Top customer</div></div><div class="lb-rest-amt">৳${u.total.toLocaleString()}</div></div>`;
+});
+html+='</div>';
+}
+html+='</div>';
+wrap.innerHTML=html;
+}
+
+/* ============================================================
+   PREMIUM
+   ============================================================ */
+function loadPremiumProducts(){
+db.collection('premium_products').onSnapshot(snap=>{
+allPremiumProducts=[];
+snap.forEach(doc=>allPremiumProducts.push({id:doc.id,...doc.data()}));
+allPremiumProducts.sort((a,b)=>parseInt(a.target||0)-parseInt(b.target||0));
+updatePremiumGrid();
+});
+}
+function updatePremiumGrid(){
+const grid=document.getElementById('premiumGrid');
+if(!grid) return;
+if(!allPremiumProducts.length){grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1;"><i class="fas fa-crown"></i>No premium rewards available yet.<br>Keep topping up for future rewards!</div>`;return;}
+const nextP=allPremiumProducts.find(p=>parseInt(p.target||0)>userTotalTopup);
+if(nextP){
+document.getElementById('premiumNextTier').innerText='Next: ৳'+parseInt(nextP.target).toLocaleString();
+const pct=Math.min(100,(userTotalTopup/parseInt(nextP.target))*100);
+document.getElementById('premiumProgressFill').style.width=pct+'%';
+}else{
+document.getElementById('premiumNextTier').innerHTML='All Unlocked <i class="fas fa-crown"></i>';
+document.getElementById('premiumProgressFill').style.width='100%';
+}
+grid.innerHTML='';
+allPremiumProducts.forEach(p=>{
+const target=parseInt(p.target||0);
+const price=parseInt(p.price||0);
+const unlocked=userTotalTopup>=target;
+const stock=p.stockCount===undefined?1:parseInt(p.stockCount);
+const outOfStock=stock<=0;
+const card=document.createElement('div');
+card.className='premium-card '+(unlocked?'unlocked':'locked');
+card.innerHTML=`
+<div class="premium-img-wrap">
+<img src="${p.image||''}" onerror="this.src='https://placehold.co/300/1a56db/FFF?text=Premium'">
+<div class="premium-lock ${unlocked?'unlocked':''}"><i class="fas ${unlocked?'fa-lock-open':'fa-lock'}"></i></div>
+</div>
+<div class="premium-card-body">
+<div class="premium-card-name">${p.name||'Premium Product'}</div>
+<div class="premium-card-desc">${p.description||'Exclusive reward for top customers'}</div>
+<div class="premium-card-meta">
+<span class="premium-target"><i class="fas fa-arrow-up"></i> ৳${target.toLocaleString()}</span>
+<span class="premium-price ${price===0?'free':''}">${price===0?'FREE':'৳'+price}</span>
+</div>
+<button class="premium-btn ${unlocked?(outOfStock?'locked':'buy'):'locked'}"><i class="fas ${unlocked?(outOfStock?'fa-box-open':'fa-bolt'):'fa-lock'}"></i> ${unlocked?(outOfStock?'Out of Stock':'View & Buy'):'Locked'}</button>
+</div>`;
+if(unlocked&&!outOfStock){card.querySelector('.premium-btn').onclick=()=>openPremiumModal(p);}
+grid.appendChild(card);
+});
+}
+function openPremiumModal(p){
+currentPmProduct=p;
+const target=parseInt(p.target||0);
+const price=parseInt(p.price||0);
+document.getElementById('pmImg').src=p.image||'';
+document.getElementById('pmTitle').innerText=p.name||'Premium Product';
+document.getElementById('pmDesc').innerText=p.description||'';
+let metaHtml=`<span class="modal-chip target"><i class="fas fa-arrow-up"></i> Target: ৳${target.toLocaleString()}</span>`;
+if(price===0) metaHtml+=`<span class="modal-chip free"><i class="fas fa-gift"></i> FREE REWARD</span>`;
+else metaHtml+=`<span class="modal-chip price"><i class="fas fa-tag"></i> ৳${price}</span>`;
+metaHtml+=`<span class="modal-chip progress"><i class="fas fa-check-circle"></i> Unlocked</span>`;
+document.getElementById('pmMeta').innerHTML=metaHtml;
+const btn=document.getElementById('pmActionBtn');
+btn.innerHTML=price===0?`<i class="fas fa-gift"></i> Claim Free Reward`:`<i class="fas fa-bolt"></i> Buy Now (৳${price})`;
+document.getElementById('premiumModal').classList.add('active');
+}
+function closePremiumModal(){document.getElementById('premiumModal').classList.remove('active');currentPmProduct=null;}
+async function pmAction(){
+if(!currentPmProduct||!currentUser) return;
+const p=currentPmProduct;
+const price=parseInt(p.price||0);
+const stock=p.stockCount===undefined?1:parseInt(p.stockCount);
+if(stock<=0){showToast('error','Out of Stock','This reward is currently unavailable.');return;}
+if(price>0&&userBalance<price){showToast('error','Low Balance','Please add ৳'+(price-userBalance)+' more to buy this.');return;}
+const res=await w8Confirm('Confirm Order?',`<b>${p.name}</b><br>${price===0?'<span style="color:#16a34a;font-weight:800;">FREE REWARD</span>':'Price: ৳'+price}`,'Confirm');
+if(!res.isConfirmed) return;
+w8Loading('Processing your order...');
+try{
+const userRef=db.collection('users').doc(currentUser.uid);
+await db.runTransaction(async t=>{
+const udoc=await t.get(userRef);
+const bal=udoc.data().balance||0;
+if(price>0&&bal<price) throw new Error('Insufficient Balance');
+if(price>0) t.update(userRef,{balance:bal-price});
+t.update(db.collection('premium_products').doc(p.id),{stockCount:firebase.firestore.FieldValue.increment(-1)});
+});
+await db.collection('orders').add({
+userId:currentUser.uid,userName:(currentUserData&&currentUserData.name)||currentUser.email,
+gameName:'Premium Reward',gameId:'premium',
+playerId:currentUser.email,productName:p.name,
+price:price,type:'premium',status:'processing',
+date:new Date(),premiumReward:true
+});
+Swal.close();closePremiumModal();
+showToast('success','Order Placed','Your premium reward order has been placed. Contact support to receive.');
+}catch(e){Swal.close();w8Error('Order Failed',e.message);}
+}
+
+/* ============================================================
+   LOAD APP CONTENT
+   ============================================================ */
+function loadAppContent(){
+db.collection("settings").doc("general").onSnapshot(doc=>{
+const data=doc.exists?doc.data():{};
+appSettings=data;
+
+if(data.logoUrl){
+const li=document.getElementById('brandLogo');
+li.src=data.logoUrl;li.style.display='block';li.onerror=function(){this.style.display='none';};
+}else{document.getElementById('brandLogo').style.display='none';}
+const an=document.getElementById('headerAppName');
+an.innerText=(data.siteName&&data.siteName.trim())?data.siteName:'GAME BAZAR';
+an.classList.remove('hidden');
+document.getElementById('headerAppNameBadge').classList.remove('hidden');
+
+if(data.logoUrl){
+const al=document.getElementById('authCustomLogo');
+al.src=data.logoUrl;al.style.display='block';
+document.getElementById('authBrandLogo').style.display='none';
+}
+if(data.siteName){document.title=data.siteName+' - Premium Top Up';}
+if(data.notice) document.getElementById('noticeText').innerText=data.notice;
+
+/* Wallet Icon */
+const walletImg=document.getElementById('walletOptImg');
+if(data.walletIconUrl&&walletImg){
+walletImg.src=data.walletIconUrl;
+walletImg.style.display='block';
+document.getElementById('walletFallback').style.display='none';
+walletImg.onload=function(){this.style.display='block';document.getElementById('walletFallback').style.display='none';};
+walletImg.onerror=function(){this.style.display='none';document.getElementById('walletFallback').style.display='flex';};
+}
+
+/* Instant Pay Icon (main big) */
+const instantImg=document.getElementById('instantOptImg');
+if(data.instantIconUrl&&instantImg){
+instantImg.src=data.instantIconUrl;
+instantImg.style.display='block';
+document.getElementById('instantFallback').style.display='none';
+instantImg.onload=function(){this.style.display='block';document.getElementById('instantFallback').style.display='none';};
+instantImg.onerror=function(){this.style.display='none';document.getElementById('instantFallback').style.display='flex';};
+}
+
+const waNum=data.whatsapp?String(data.whatsapp).replace(/\s/g,''):"";
+const waLink=waNum?`https://wa.me/${waNum}`:'#';
+const tgLink=data.telegram||'#';
+const fbLink=data.facebook||'#';
+const ytLink=data.youtube||'#';
+
+document.getElementById('supportWa').href=waLink;
+document.getElementById('supportTg').href=tgLink;
+document.getElementById('fabWa').href=waLink;
+document.getElementById('fabTg').href=tgLink;
+document.getElementById('fWhatsapp').href=waLink;
+document.getElementById('fTelegram').href=tgLink;
+document.getElementById('fFacebook').href=fbLink;
+document.getElementById('fYoutube').href=ytLink;
+
+const promo=document.getElementById('promoBannerContainer');
+if(data.promoImageUrl){
+document.getElementById('promoBannerImg').src=data.promoImageUrl;
+document.getElementById('promoBannerLink').href=data.promoImageLink||'#';
+promo.classList.remove('hidden');
+}else promo.classList.add('hidden');
+
+isAutoPayEnabled=data.autoPayEnabled===true;
+});
+
+db.collection("admin").doc("payment").onSnapshot(doc=>{
+if(doc.exists){
+const data=doc.data();
+paymentMethods={};
+['bkash','nagad','rocket'].forEach(k=>{
+if(data[k]){
+const cfg=PAYMENT_CONFIG[k];
+paymentMethods[k]={key:k,name:cfg.name,number:data[k],type:'Personal',image:data[k+'_image']||cfg.defaultImg,enabled:true};
+}
+});
+if(isAutoPayEnabled) renderAutoPaymentMethods();
+updateInstantIcons();
+}
+});
+
+loadGames();
+loadTutorials();
+loadBanners();
+loadRecentOrders();
+loadPremiumProducts();
+loadTotalTopupAndLeaderboard();
+}
+
+function openSupport(){
+const wa=document.getElementById('supportWa').href;
+if(wa&&wa!=='#') window.open(wa,'_blank');
+else if(appSettings.telegram) window.open(appSettings.telegram,'_blank');
+else showToast('info','Not Configured','Support link is not configured yet.');
+}
+
+/* ============================================================
+   GAMES
+   ============================================================ */
+function loadGames(){
+const list=document.getElementById('servicesList');
+list.innerHTML=`<div style="text-align:center;padding:40px 0;"><i class="fas fa-spinner fa-spin" style="color:var(--blue);font-size:28px;"></i><p style="color:var(--muted);font-size:13px;margin-top:10px;font-weight:600;">Loading Games...</p></div>`;
+gamesData={};
+db.collection("categories").orderBy("slot").get()
+.then(catsSnap=>Promise.all([Promise.resolve(catsSnap),db.collection("services").get()]))
+.then(([catsSnap,svcSnap])=>{
+if(svcSnap.empty){list.innerHTML=`<div class="empty-state"><i class="fas fa-gamepad"></i>No Games Available</div>`;return;}
+const catsMap=new Map();
+catsSnap.forEach(d=>catsMap.set(d.id,{...d.data(),games:[]}));
+let uncat=[];
+svcSnap.forEach(d=>{
+const g={id:d.id,...d.data()};
+gamesData[d.id]=g;
+if(g.categoryId&&catsMap.has(g.categoryId)) catsMap.get(g.categoryId).games.push(g);
+else uncat.push(g);
+});
+list.innerHTML='';
+catsMap.forEach(cat=>{
+if(cat.games.length){
+let html='';
+cat.games.forEach(g=>{
+html+=`<div class="game-tile" onclick="openTopUp('${g.id}')"><div class="game-tile-img"><img src="${g.image||''}" onerror="this.src='https://placehold.co/200/1a56db/FFF?text=Game'"></div><div class="game-tile-name">${g.name}</div></div>`;
+});
+list.innerHTML+=`<div class="cat-heading">${cat.name}</div><div class="games-grid">${html}</div>`;
+}
+});
+if(uncat.length){
+let html='';
+uncat.forEach(g=>{html+=`<div class="game-tile" onclick="openTopUp('${g.id}')"><div class="game-tile-img"><img src="${g.image||''}" onerror="this.src='https://placehold.co/200/1a56db/FFF?text=Game'"></div><div class="game-tile-name">${g.name}</div></div>`;});
+list.innerHTML+=`<div class="cat-heading">Others</div><div class="games-grid">${html}</div>`;
+}
+}).catch(err=>{list.innerHTML=`<div class="empty-state" style="color:var(--red);">Failed to load games</div>`;});
+}
+
+/* ============================================================
+   TUTORIALS + BANNERS + RECENT
+   ============================================================ */
+function loadTutorials(){
+db.collection("tutorials").onSnapshot(snap=>{
+const list=document.getElementById('tutorialList');
+list.innerHTML='';
+if(snap.empty){list.innerHTML=`<div class="empty-state"><i class="fas fa-video"></i>No tutorials yet</div>`;return;}
+snap.forEach(doc=>{
+const d=doc.data();
+list.innerHTML+=`<div class="tutorial-card" onclick="window.open('${d.link}','_blank')"><div class="tutorial-thumb"><img src="${d.thumbnail||''}" onerror="this.src='https://placehold.co/600x300/1a56db/FFF?text=Video'"><div class="tutorial-play"><i class="fas fa-play-circle"></i></div></div><div class="tutorial-title">${d.title}</div></div>`;
+});
+});
+}
+function loadBanners(){
+db.collection("banners").onSnapshot(snap=>{
+const inner=document.getElementById('bannerInner');
+const dots=document.getElementById('bannerDots');
+inner.innerHTML='';dots.innerHTML='';
+if(snap.empty){inner.innerHTML=`<div class="banner-slide"><img src="https://placehold.co/600x300/0a1e3f/FFF?text=GAME BAZAR"></div>`;return;}
+const docs=[];
+snap.forEach(d=>docs.push(d.data()));
+docs.forEach((b,i)=>{
+const div=document.createElement('div');
+div.className='banner-slide';
+div.innerHTML=`<img src="${b.image}" onerror="this.src='https://placehold.co/600x300/0a1e3f/FFF?text=Banner'">`;
+inner.appendChild(div);
+const dot=document.createElement('div');
+dot.className='banner-dot'+(i===0?' active':'');
+dots.appendChild(dot);
+});
+startBannerSlider(docs.length);
+});
+}
+let bannerInterval=null,bannerIdx=0;
+function startBannerSlider(count){
+clearInterval(bannerInterval);bannerIdx=0;
+if(count<=1) return;
+bannerInterval=setInterval(()=>{
+bannerIdx=(bannerIdx+1)%count;
+document.getElementById('bannerInner').style.transform=`translateX(-${bannerIdx*100}%)`;
+document.querySelectorAll('.banner-dot').forEach((d,i)=>d.classList.toggle('active',i===bannerIdx));
+},3500);
+}
+function loadRecentOrders(){
+const list=document.getElementById('latestOrdersList');
+db.collection('orders').orderBy('date','desc').limit(5).onSnapshot(snap=>{
+if(snap.empty){list.innerHTML=`<div class="empty-state" style="padding:14px;">No recent orders</div>`;return;}
+list.innerHTML='';
+snap.forEach(doc=>{
+const d=doc.data();
+let name=d.userName||"Customer";
+if(name.includes('@')) name=name.split('@')[0];
+name=name.charAt(0).toUpperCase()+name.slice(1);
+const initial=name.charAt(0).toUpperCase();
+let status=(d.status||'pending').toLowerCase();
+let cls='status-pending',txt='Pending';
+if(['success','complete','completed'].includes(status)){cls='status-success';txt='Success';}
+else if(['processing'].includes(status)){cls='status-processing';txt='Processing';}
+list.innerHTML+=`<div class="order-row"><div class="order-avatar">${initial}</div><div class="order-info"><div class="order-name">${name}</div><div class="order-prod">${d.productName||'Order'} - ৳${d.price||0}</div></div><div class="order-status ${cls}">${txt}</div></div>`;
+});
+});
+}
+
+/* ============================================================
+   TOPUP WITH 2 PAYMENT OPTIONS
+   ============================================================ */
+function openTopUp(gameId){
+if(!isLoggedIn){document.getElementById('authOverlay').classList.remove('hidden');return;}
+const g=gamesData[gameId];
+if(!g) return;
+selectedGameId=gameId;
+selectedGameName=g.name;
+selectedProduct=null;
+selectedGameType=g.type||'uid';
+selectedGameData=g;
+selectedPayOption=null;
+selectedInstantMethod=null;
+pendingOrderData=null;
+
+document.getElementById('topupGameTitle').innerText=g.name;
+document.getElementById('topupGameImg').src=g.image||'';
+const sub=document.getElementById('topupSubTitle');
+if(selectedGameType==='code') sub.innerText=g.name+" (Voucher)";
+else if(selectedGameType==='auto-topup') sub.innerText=g.name+" (Auto Delivery)";
+else sub.innerText=g.name+" (Player ID)";
+
+document.getElementById('optWallet').classList.remove('selected');
+document.getElementById('optInstant').classList.remove('selected');
+document.getElementById('instantSubWrap').classList.add('hidden');
+document.getElementById('buyNowBtn').disabled=true;
+
+const inputsPanel=document.getElementById('dynamicInputsPanel');
+const inputsWrap=document.getElementById('dynamicInputsWrap');
+inputsWrap.innerHTML='';
+
+let fields=g.customFields;
+if(!fields||!Array.isArray(fields)||!fields.length){
+if(selectedGameType==='code'){inputsPanel.style.display='none';}
+else{
+inputsPanel.style.display='block';
+document.getElementById('dynPanelTitle').innerText='Enter Player ID';
+fields=[{label:'Player ID',placeholder:'Enter your Player ID',type:'number',required:true,key:'playerId',icon:'fa-user'}];
+}
+}else{
+inputsPanel.style.display='block';
+document.getElementById('dynPanelTitle').innerText='Enter Required Information';
+}
+
+if(inputsPanel.style.display!=='none'){
+fields.forEach((f,i)=>{
+const fid='dyn_'+i;
+inputsWrap.innerHTML+=`<div class="form-group"><label><i class="fas ${f.icon||'fa-user'}"></i> ${f.label||'Field'} ${f.required!==false?'<span class="req">*</span>':''}</label><input type="${f.type||'text'}" id="${fid}" class="input-field" placeholder="${f.placeholder||''}" data-key="${f.key||fid}"></div>`;
+});
+}
+
+const rulesBox=document.getElementById('gameRulesBox');
+if(g.rules){document.getElementById('gameRulesText').innerText=g.rules;rulesBox.classList.remove('hidden');}
+else rulesBox.classList.add('hidden');
+
+showSec('topup');
+
+document.getElementById('optWalletBalance').innerText=userBalance;
+document.getElementById('infoBalance').innerText=Number(userBalance).toFixed(2);
+document.getElementById('infoRequired').innerText='0';
+
+const grid=document.getElementById('productsGrid');
+const loader=document.getElementById('productLoader');
+grid.innerHTML='';loader.style.display='block';
+db.collection('services').doc(gameId).collection('products').orderBy('price','asc').get().then(snap=>{
+loader.style.display='none';
+if(snap.empty){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:20px;font-size:12px;">No packages available</div>`;return;}
+snap.forEach(doc=>{
+const p=doc.data();
+const inStock=(p.stockCount===undefined||p.stockCount>0);
+const card=document.createElement('div');
+card.className='product-card'+(inStock?'':' disabled');
+card.onclick=()=>{if(inStock) selectProduct(card,p.name,p.price,doc.id);};
+card.innerHTML=`<div class="product-icon"><i class="fas fa-gem"></i></div><div class="product-name">${p.name}</div><div class="product-price">৳${p.price}</div><div class="product-stock ${inStock?'stock-in':'stock-out'}">${inStock?'In Stock':'Out of Stock'}</div>`;
+grid.appendChild(card);
+});
+});
+}
+function selectProduct(el,name,price,id){
+if(el.classList.contains('disabled')) return;
+document.querySelectorAll('.product-card').forEach(c=>c.classList.remove('selected'));
+el.classList.add('selected');
+selectedProduct={id,name,price:parseInt(price)};
+document.getElementById('infoRequired').innerText=selectedProduct.price;
+updateBuyNowState();
+}
+function selectPayOption(opt){
+selectedPayOption=opt;
+document.getElementById('optWallet').classList.toggle('selected',opt==='wallet');
+document.getElementById('optInstant').classList.toggle('selected',opt==='instant');
+const subWrap=document.getElementById('instantSubWrap');
+if(opt==='instant'){subWrap.classList.remove('hidden');renderInstantMethods();}
+else{subWrap.classList.add('hidden');selectedInstantMethod=null;}
+updateBuyNowState();
+}
+function renderInstantMethods(){
+const grid=document.getElementById('instantMethodGrid');
+if(!grid) return;
+grid.innerHTML='';
+const order=['bkash','nagad','rocket'];
+let has=false;
+order.forEach(k=>{
+const cfg=PAYMENT_CONFIG[k];
+const pm=paymentMethods[k];
+if(!pm||!pm.number) return;
+has=true;
+const imgSrc=(pm&&pm.image)?pm.image:cfg.defaultImg;
+grid.innerHTML+=`<button class="instant-method-btn" data-method="${k}" onclick="pickInstantMethod('${k}')">
+<img src="${imgSrc}" onerror="this.src='${cfg.defaultImg}'">
+<span>${cfg.name}</span>
+</button>`;
+});
+if(!has){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:11.5px;padding:8px;">No methods configured</div>`;}
+if(selectedInstantMethod){
+const btn=grid.querySelector(`[data-method="${selectedInstantMethod}"]`);
+if(btn) btn.classList.add('active');
+}
+}
+function pickInstantMethod(k){
+selectedInstantMethod=k;
+document.querySelectorAll('.instant-method-btn').forEach(b=>b.classList.toggle('active',b.dataset.method===k));
+updateBuyNowState();
+}
+function updateInstantIcons(){
+const b=document.getElementById('optIcoBkash');
+const n=document.getElementById('optIcoNagad');
+const r=document.getElementById('optIcoRocket');
+if(b){const img=paymentMethods.bkash&&paymentMethods.bkash.image?paymentMethods.bkash.image:PAYMENT_CONFIG.bkash.defaultImg;b.src=img;}
+if(n){const img=paymentMethods.nagad&&paymentMethods.nagad.image?paymentMethods.nagad.image:PAYMENT_CONFIG.nagad.defaultImg;n.src=img;}
+if(r){const img=paymentMethods.rocket&&paymentMethods.rocket.image?paymentMethods.rocket.image:PAYMENT_CONFIG.rocket.defaultImg;r.src=img;}
+}
+function updateBuyNowState(){
+const btn=document.getElementById('buyNowBtn');
+let ok=false;
+if(selectedProduct&&selectedPayOption){
+if(selectedPayOption==='wallet') ok=true;
+else if(selectedPayOption==='instant'&&selectedInstantMethod) ok=true;
+}
+btn.disabled=!ok;
+}
+
+/* ============================================================
+   BUY NOW
+   ============================================================ */
+async function buyNow(){
+if(!isLoggedIn){document.getElementById('authOverlay').classList.remove('hidden');return;}
+if(!selectedProduct){showToast('warning','Select Package','Please select a recharge package.');return;}
+if(!selectedPayOption){showToast('warning','Select Payment','Please choose Wallet or Instant Pay.');return;}
+
+let playerId="N/A";
+let customData={};
+const inputs=document.querySelectorAll('#dynamicInputsWrap input');
+if(inputs.length){
+for(let i=0;i<inputs.length;i++){
+const v=inputs[i].value.trim();
+const key=inputs[i].dataset.key||('field'+i);
+if(!v){showToast('warning','Missing Information','Please fill all required fields.');return;}
+customData[key]=v;
+if(!playerId||playerId==='N/A') playerId=v;
+}
+}else if(selectedGameType==='code'){playerId="Voucher Request";}
+
+pendingOrderData={playerId,customData};
+
+if(selectedPayOption==='wallet'){
+return processWalletPay(playerId,customData);
+}else{
+return processInstantPay(playerId,customData);
+}
+}
+async function processWalletPay(playerId,customData){
+if(userBalance<selectedProduct.price){
+showToast('error','Low Balance',`You need ৳${selectedProduct.price-userBalance} more. Please add money or use Instant Pay.`);
+return;
+}
+let infoHtml=`<div style="text-align:left;"><b>${selectedProduct.name}</b><br>Price: ৳${selectedProduct.price}<br>Pay via: <b>Wallet Balance</b>`;
+if(Object.keys(customData).length){
+infoHtml+='<hr style="margin:10px 0;border:none;border-top:1px dashed #ddd;">';
+Object.entries(customData).forEach(([k,v])=>{infoHtml+=`<small><b>${k}:</b> ${v}</small><br>`;});
+}
+infoHtml+='</div>';
+const result=await w8Confirm('Confirm Purchase?',infoHtml,'Yes, Buy Now');
+if(!result.isConfirmed) return;
+w8Loading('Processing your order...');
+
+if(selectedGameType==='code') return processVoucherOrder(customData);
+if(selectedGameType==='auto-topup') return processAutoTopUp(playerId,customData);
+return processUidOrder(playerId,customData);
+}
+async function processVoucherOrder(customData){
+try{
+const stockRef=db.collection('services').doc(selectedGameId).collection('products').doc(selectedProduct.id).collection('stock');
+const stockSnap=await stockRef.where('status','==','available').limit(1).get();
+if(stockSnap.empty){Swal.close();w8Error('Out of Stock','This product is currently unavailable.');return;}
+const stockDoc=stockSnap.docs[0];
+const code=stockDoc.data().code;
+const userRef=db.collection('users').doc(currentUser.uid);
+await db.runTransaction(async t=>{
+const udoc=await t.get(userRef);
+const newBal=udoc.data().balance-selectedProduct.price;
+if(newBal<0) throw new Error("Insufficient Balance");
+t.update(userRef,{balance:newBal});
+t.delete(stockDoc.ref);
+t.update(db.collection('services').doc(selectedGameId).collection('products').doc(selectedProduct.id),{stockCount:firebase.firestore.FieldValue.increment(-1)});
+});
+await db.collection('orders').add({
+userId:currentUser.uid,userName:(currentUserData&&currentUserData.name)||currentUser.email,
+gameName:selectedGameName,gameId:selectedGameId,
+productName:selectedProduct.name,price:selectedProduct.price,
+playerId:"Voucher",type:'code',status:'success',
+paymentOption:'wallet',
+redeemCode:code,date:new Date(),customData:customData||{}
+});
+Swal.close();
+showToast('success','Purchase Successful','Your voucher code has been sent. Check order history.');
+showSec('history');
+}catch(e){Swal.close();w8Error('Purchase Failed',e.message);}
+}
+function processUidOrder(playerId,customData){
+const newBal=userBalance-selectedProduct.price;
+db.collection('users').doc(currentUser.uid).update({balance:newBal})
+.then(()=>db.collection('orders').add({
+userId:currentUser.uid,userName:(currentUserData&&currentUserData.name)||currentUser.email,
+gameName:selectedGameName,gameId:selectedGameId,
+playerId:playerId,productName:selectedProduct.name,
+price:selectedProduct.price,type:'uid',status:'processing',
+paymentOption:'wallet',
+date:new Date(),customData:customData||{}
+}))
+.then(()=>{Swal.close();showToast('success','Order Placed','Your order is being processed.');showSec('home');})
+.catch(err=>{Swal.close();w8Error('Order Failed',err.message);});
+}
+async function processAutoTopUp(playerId,customData){
+try{
+const cfgDoc=await db.collection('settings').doc('general').get();
+if(!cfgDoc.exists){Swal.close();w8Error('Configuration Error','Admin settings not found.');return;}
+const s=cfgDoc.data();
+if(!s.autoTopUpApiUrl||!s.autoTopUpApiKey||!s.autoTopUpCallbackUrl){Swal.close();w8Error('Config Error','Auto TopUp is not configured.');return;}
+const stockRef=db.collection('services').doc(selectedGameId).collection('products').doc(selectedProduct.id).collection('stock');
+const stockSnap=await stockRef.where('status','==','available').limit(1).get();
+if(stockSnap.empty){Swal.close();w8Error('Out of Stock','Product unavailable.');return;}
+const stockDoc=stockSnap.docs[0];
+const code=stockDoc.data().code;
+const userRef=db.collection('users').doc(currentUser.uid);
+const orderRef=db.collection('orders').doc();
+await db.runTransaction(async t=>{
+const udoc=await t.get(userRef);
+const newBal=udoc.data().balance-selectedProduct.price;
+if(newBal<0) throw new Error("Insufficient Balance");
+t.update(userRef,{balance:newBal});
+t.delete(stockDoc.ref);
+t.update(db.collection('services').doc(selectedGameId).collection('products').doc(selectedProduct.id),{stockCount:firebase.firestore.FieldValue.increment(-1)});
+t.set(orderRef,{
+userId:currentUser.uid,userName:(currentUserData&&currentUserData.name)||currentUser.email,
+gameName:selectedGameName,gameId:selectedGameId,
+playerId:playerId,productName:selectedProduct.name,
+price:selectedProduct.price,type:'auto-topup',status:'processing',
+paymentOption:'wallet',
+date:new Date(),usedCode:code,customData:customData||{}
+});
+});
+fetch(s.autoTopUpApiUrl,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({api:s.autoTopUpApiKey,playerid:playerId,code,orderid:orderRef.id,url:s.autoTopUpCallbackUrl})}).catch(e=>console.error('Auto TopUp API:',e));
+Swal.close();
+showToast('success','Order Placed','Your top-up is being processed.');
+setTimeout(()=>showSec('home'),1500);
+}catch(e){Swal.close();w8Error('Order Failed',e.message);}
+}
+
+/* ============================================================
+   INSTANT PAY
+   ============================================================ */
+function processInstantPay(playerId,customData){
+const cfg=PAYMENT_CONFIG[selectedInstantMethod];
+const pm=paymentMethods[selectedInstantMethod];
+if(!pm||!pm.number){showToast('error','Not Configured','Payment method not configured.');return;}
+document.getElementById('ipTitle').innerHTML=`<i class="fas fa-bolt"></i> Instant Pay`;
+document.getElementById('ipSub').innerText='Complete the payment to place your order';
+document.getElementById('ipPayHead').className='pay-head '+selectedInstantMethod;
+const logo=document.getElementById('ipPayLogo');
+logo.src=pm.image;logo.onerror=function(){this.src=cfg.defaultImg;};
+document.getElementById('ipPayAmount').innerText=selectedProduct.price;
+document.getElementById('ipMethodName').innerText=cfg.name;
+document.getElementById('ipMethodType').innerText=pm.type||'Personal';
+document.getElementById('ipNumberDisplay').innerText=pm.number;
+document.getElementById('ipInstructionList').className='instr-list theme-'+selectedInstantMethod;
+document.getElementById('ipInstructionList').innerHTML=`
+<li><span class="instr-num">1</span><span>Open <b>${cfg.app}</b> app or dial <span class="ussd-chip">${cfg.ussd}</span></span></li>
+<li><span class="instr-num">2</span><span>Tap <b>Send Money</b> and enter the number above</span></li>
+<li><span class="instr-num">3</span><span>Enter amount <b>৳${selectedProduct.price}</b> and confirm with PIN</span></li>
+<li><span class="instr-num">4</span><span>Copy <b>Transaction ID</b> from ${cfg.verify}</span></li>
+<li><span class="instr-num">5</span><span>Paste it below with your <b>Sender Number</b></span></li>`;
+const cb=document.getElementById('ipCopyBtn');
+cb.classList.remove('copied');cb.innerHTML='<i class="fas fa-copy"></i> Copy';
+document.getElementById('ipSender').value=(currentUserData&&currentUserData.phone)||'';
+document.getElementById('ipTrx').value='';
+document.getElementById('instantPayModal').classList.add('active');
+}
+function closeInstantPayModal(){document.getElementById('instantPayModal').classList.remove('active');}
+function copyIpNumber(){
+const num=document.getElementById('ipNumberDisplay').innerText;
+navigator.clipboard.writeText(num).then(()=>{
+const cb=document.getElementById('ipCopyBtn');
+cb.classList.add('copied');cb.innerHTML='<i class="fas fa-check"></i> Copied';
+showToast('success','Copied','Payment number copied.');
+setTimeout(()=>{cb.classList.remove('copied');cb.innerHTML='<i class="fas fa-copy"></i> Copy';},2000);
+});
+}
+async function submitInstantPay(){
+const sender=document.getElementById('ipSender').value.trim();
+const trx=document.getElementById('ipTrx').value.trim().toUpperCase();
+if(!sender||sender.length<11){showToast('warning','Invalid Number','Please enter a valid sender number.');return;}
+if(!trx||trx.length<4){showToast('warning','Invalid TrxID','Please enter a valid transaction ID.');return;}
+if(!pendingOrderData){showToast('error','Error','Order data missing. Try again.');return;}
+const btn=document.getElementById('ipSubmitBtn');
+btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';
+try{
+const cfg=PAYMENT_CONFIG[selectedInstantMethod];
+const pm=paymentMethods[selectedInstantMethod];
+const price=parseInt(selectedProduct.price);
+
+const orderData={
+userId:currentUser.uid,
+userName:(currentUserData&&currentUserData.name)||currentUser.email,
+userEmail:currentUser.email,
+gameName:selectedGameName,
+gameId:selectedGameId,
+playerId:pendingOrderData.playerId,
+productName:selectedProduct.name,
+productId:selectedProduct.id,
+price:price,
+type:selectedGameType,
+status:'processing',
+paymentOption:'instant',
+paymentMethod:pm.name,
+paymentMethodKey:selectedInstantMethod,
+paymentNumber:pm.number,
+paymentSender:sender,
+paymentTrxId:trx,
+date:new Date(),
+customData:pendingOrderData.customData||{}
+};
+if(selectedGameType==='code') orderData.type='code';
+if(selectedGameType==='auto-topup') orderData.type='auto-topup';
+
+await db.collection('orders').add(orderData);
+await db.collection('deposits').add({
+userId:currentUser.uid,
+userEmail:currentUser.email,
+amount:price,
+method:pm.name,
+sender:sender,
+trxId:trx,
+status:'pending',
+type:'direct_order',
+orderProduct:selectedProduct.name,
+orderGame:selectedGameName,
+date:new Date()
+}).catch(()=>{});
+
+Swal.close();
+closeInstantPayModal();
+showToast('success','Order Placed','Your order is being verified. Check order history.');
+selectedPayOption=null;selectedInstantMethod=null;selectedProduct=null;
+showSec('history');
+}catch(e){
+Swal.close();
+w8Error('Failed',e.message);
+}
+btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane"></i> Submit Order';
+}
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+function showSec(id){
+if(!isLoggedIn&&id!=='home'){document.getElementById('authOverlay').classList.remove('hidden');return;}
+document.querySelectorAll('.app-main > section').forEach(s=>s.classList.add('hidden'));
+const t=document.getElementById(id+'Sec');
+if(t) t.classList.remove('hidden');
+document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+const navMap={home:'navHome',premium:'navPremium',addmoney:'navAddmoney',history:'navHistory',account:'navAccount'};
+const nid=navMap[id];
+if(nid) document.getElementById(nid).classList.add('active');
+
+if(id==='addmoney'){
+if(isAutoPayEnabled){
+document.getElementById('autoPaymentView').classList.remove('hidden');
+document.getElementById('manualPaymentView').classList.add('hidden');
+renderAutoPaymentMethods();
+resetAutoForm();
+}else{
+document.getElementById('autoPaymentView').classList.add('hidden');
+document.getElementById('manualPaymentView').classList.remove('hidden');
+resetPaymentFlow();
+renderMethods();
+}
+}
+if(id==='history') loadHistory();
+if(id==='premium') updatePremiumGrid();
+window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============================================================
+   PAYMENT FLOW (Add Money)
+   ============================================================ */
+function resetPaymentFlow(){
+pendingAmount=0;pendingMethod=null;
+document.getElementById('addAmountInput').value='';
+document.querySelectorAll('.quick-grid button').forEach(b=>b.classList.remove('active'));
+document.getElementById('paySender').value='';
+document.getElementById('payTrx').value='';
+goStep(1);
+}
+function updateIndicator(step){
+['si1','si2','si3'].forEach((id,i)=>{
+const el=document.getElementById(id);
+el.classList.remove('active','done');
+if(i+1<step) el.classList.add('done');
+if(i+1===step) el.classList.add('active');
+});
+['sl1','sl2'].forEach((id,i)=>{document.getElementById(id).classList.toggle('done',i+1<step);});
+}
+function pickAmt(a){
+document.getElementById('addAmountInput').value=a;
+document.querySelectorAll('.quick-grid button').forEach(b=>b.classList.toggle('active',Number(b.dataset.amt)===a));
+}
+document.getElementById('addAmountInput').addEventListener('input',e=>{
+const v=Number(e.target.value);
+document.querySelectorAll('.quick-grid button').forEach(b=>b.classList.toggle('active',Number(b.dataset.amt)===v));
+});
+function goStep(n){
+document.querySelectorAll('#manualPaymentView .step-container').forEach(el=>el.classList.remove('active'));
+document.getElementById('step'+n).classList.add('active');
+updateIndicator(n);
+}
+function stepNext(){
+const v=Number(document.getElementById('addAmountInput').value);
+if(!v||v<10){showToast('warning','Invalid Amount','Minimum add amount is 10 BDT.');return;}
+pendingAmount=v;
+document.getElementById('step2Amount').innerText=v;
+renderMethods();
+goStep(2);
+}
+function renderMethods(){
+const list=document.getElementById('methodList');
+list.innerHTML='';
+const order=['bkash','nagad','rocket'];
+let has=false;
+order.forEach(key=>{
+const m=paymentMethods[key];
+if(!m||!m.number) return;
+has=true;
+const cfg=PAYMENT_CONFIG[key];
+list.innerHTML+=`<div class="method-card ${key}" onclick="selectMethod('${key}')"><img class="method-logo" src="${m.image}" onerror="this.src='${cfg.defaultImg}'"><div class="method-info"><div class="method-name">${m.name}</div><div class="method-num">${m.number}</div><div class="method-type"><i class="fas fa-user"></i> ${m.type||'Personal'}</div></div><i class="fas fa-chevron-right method-arrow"></i></div>`;
+});
+if(!has) list.innerHTML=`<div style="text-align:center;padding:30px;color:var(--muted);font-size:12.5px;"><i class="fas fa-exclamation-triangle" style="font-size:28px;color:var(--gold);display:block;margin-bottom:10px;"></i>No payment methods configured.<br>Please contact support.</div>`;
+}
+function selectMethod(key){
+const m=paymentMethods[key];
+if(!m) return;
+const cfg=PAYMENT_CONFIG[key];
+pendingMethod={key,...m,cfg};
+document.getElementById('payHead').className='pay-head '+key;
+const logo=document.getElementById('payLogo');
+logo.src=m.image;logo.onerror=function(){this.src=cfg.defaultImg;};
+document.getElementById('payAmount').innerText=pendingAmount;
+document.getElementById('payMethodName').innerText=m.name;
+document.getElementById('payMethodType').innerText=m.type||'Personal';
+document.getElementById('payNumberDisplay').innerText=m.number;
+document.getElementById('instructionList').className='instr-list theme-'+key;
+document.getElementById('instructionList').innerHTML=`
+<li><span class="instr-num">1</span><span>Open <b>${cfg.app}</b> app or dial <span class="ussd-chip">${cfg.ussd}</span></span></li>
+<li><span class="instr-num">2</span><span>Tap <b>Send Money</b> and enter the number above</span></li>
+<li><span class="instr-num">3</span><span>Enter amount <b>৳${pendingAmount}</b> and confirm with PIN</span></li>
+<li><span class="instr-num">4</span><span>Copy <b>Transaction ID</b> from ${cfg.verify}</span></li>
+<li><span class="instr-num">5</span><span>Paste it below with your <b>Sender Number</b></span></li>`;
+const cb=document.getElementById('payCopyBtn');
+cb.classList.remove('copied');cb.innerHTML='<i class="fas fa-copy"></i> Copy';
+goStep(3);
+}
+function copyPayNumber(){
+const num=document.getElementById('payNumberDisplay').innerText;
+navigator.clipboard.writeText(num).then(()=>{
+const cb=document.getElementById('payCopyBtn');
+cb.classList.add('copied');cb.innerHTML='<i class="fas fa-check"></i> Copied';
+showToast('success','Copied','Payment number copied to clipboard.');
+setTimeout(()=>{cb.classList.remove('copied');cb.innerHTML='<i class="fas fa-copy"></i> Copy';},2000);
+});
+}
+function submitDeposit(){
+if(!isLoggedIn){document.getElementById('authOverlay').classList.remove('hidden');return;}
+const sender=document.getElementById('paySender').value.trim();
+const trx=document.getElementById('payTrx').value.trim().toUpperCase();
+if(!sender||sender.length<11){showToast('warning','Invalid Number','Please enter a valid sender number.');return;}
+if(!trx||trx.length<4){showToast('warning','Invalid TrxID','Please enter a valid transaction ID.');return;}
+if(!pendingMethod){showToast('warning','Select Method','Please select a payment method.');return;}
+const btn=document.getElementById('paySubmitBtn');
+btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';
+db.collection('deposits').add({
+userId:currentUser.uid,userEmail:currentUser.email,
+amount:pendingAmount,method:pendingMethod.name,
+sender:sender,trxId:trx,status:'pending',type:'balance_topup',date:new Date()
+}).then(()=>{
+Swal.close();
+showToast('success','Request Submitted','Your deposit request is pending approval.');
+resetPaymentFlow();
+showSec('history');
+}).catch(err=>{Swal.close();w8Error('Submission Failed',err.message);})
+.finally(()=>{btn.disabled=false;btn.innerHTML='<i class="fas fa-paper-plane" style="margin-right:6px;"></i> Submit Deposit Request';});
+}
+
+/* ============================================================
+   AUTO PAYMENT
+   ============================================================ */
+function renderAutoPaymentMethods(){
+const grid=document.getElementById('autoPaymentMethodsGrid');
+if(!grid) return;
+grid.innerHTML='';
+const methods=[
+{key:'bKash',dbKey:'bkash',label:'bKash',initials:'bK'},
+{key:'Nagad',dbKey:'nagad',label:'Nagad',initials:'NG'},
+{key:'Rocket',dbKey:'rocket',label:'Rocket',initials:'RK'}
+];
+methods.forEach(m=>{
+const pm=paymentMethods[m.dbKey];
+const imgSrc=(pm&&pm.image)?pm.image:PAYMENT_CONFIG[m.dbKey].defaultImg;
+grid.innerHTML+=`<div class="auto-method-card ${m.dbKey}" onclick="showAutoPaymentForm('${m.key}')">
+<img src="${imgSrc}" class="auto-method-icon" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+<div class="auto-method-fallback" style="display:none;">${m.initials}</div>
+<div class="auto-method-label">${m.label}</div>
+</div>`;
+});
+}
+function showAutoPaymentForm(method){
+document.getElementById('autoPaymentMethodsGrid').style.display='none';
+document.getElementById('autoPaymentFormContainer').classList.remove('hidden');
+document.getElementById('autoFormMethodName').innerText=method;
+db.collection('admin').doc('payment').get().then(doc=>{
+if(doc.exists){
+const key=method.toLowerCase();
+const num=doc.data()[key]||'Not Set';
+document.getElementById('autoAdminNumber').innerText=num;
+}
+});
+}
+function resetAutoForm(){
+const g=document.getElementById('autoPaymentMethodsGrid');
+if(g) g.style.display='grid';
+document.getElementById('autoPaymentFormContainer').classList.add('hidden');
+document.getElementById('autoDepTrx').value='';
+}
+function copyAutoNumber(){
+const num=document.getElementById('autoAdminNumber').innerText;
+navigator.clipboard.writeText(num);
+showToast('success','Copied','Payment number copied to clipboard.');
+}
+async function verifyAutoPayment(){
+const trx=document.getElementById('autoDepTrx').value.trim().toUpperCase();
+if(!trx){showToast('warning','Missing TrxID','Please enter the transaction ID.');return;}
+w8Loading('Verifying payment...');
+const check=await db.collection('deposits').where('trxId','==',trx).limit(1).get();
+if(!check.empty){Swal.close();w8Error('Already Used','This transaction ID has already been used.');return;}
+rtdb.ref('XNXANIKPAY').orderByChild('txid').equalTo(trx).once('value',async snap=>{
+if(!snap.exists()){Swal.close();w8Error('Not Found','Transaction ID not found.');return;}
+let data=null;
+snap.forEach(c=>data=c.val());
+if(!data||!data.amount){Swal.close();w8Error('Invalid Data','Payment data is invalid.');return;}
+const amount=parseInt(data.amount);
+const userRef=db.collection('users').doc(currentUser.uid);
+try{
+await db.runTransaction(async t=>{
+const udoc=await t.get(userRef);
+const newBal=(udoc.data().balance||0)+amount;
+t.update(userRef,{balance:newBal});
+});
+await db.collection('deposits').add({
+userId:currentUser.uid,userEmail:currentUser.email,
+amount:amount,trxId:trx,status:'approved',
+method:'Auto Pay',date:new Date()
+});
+Swal.close();
+showToast('success','Payment Verified','৳'+amount+' added to your account.');
+resetAutoForm();
+}catch(e){Swal.close();w8Error('Verification Failed','Could not add balance.');}
+});
+}
+
+/* ============================================================
+   HISTORY
+   ============================================================ */
+function loadHistory(){
+const list=document.getElementById('historyList');
+if(!currentUser) return;
+list.innerHTML=`<div style="text-align:center;padding:24px;"><i class="fas fa-spinner fa-spin" style="color:var(--blue);font-size:22px;"></i></div>`;
+db.collection('orders').where('userId','==',currentUser.uid).limit(80).get()
+.then(snap=>{
+if(snap.empty){list.innerHTML=`<div class="empty-state"><i class="fas fa-shopping-bag"></i>No orders yet</div>`;return;}
+const orders=[];
+snap.forEach(d=>orders.push(d.data()));
+orders.sort((a,b)=>{
+const da=a.date?a.date.toDate():new Date(0);
+const dbt=b.date?b.date.toDate():new Date(0);
+return dbt-da;
+});
+list.innerHTML='';
+orders.forEach(d=>{
+const status=(d.status||'pending').toLowerCase();
+let cls='status-pending',txt='Pending';
+if(['success','complete','completed'].includes(status)){cls='status-success';txt='Success';}
+else if(['processing'].includes(status)){cls='status-processing';txt='Processing';}
+else if(['rejected','cancel','cancelled'].includes(status)){cls='status-rejected';txt='Rejected';}
+let dateStr="N/A";
+if(d.date&&d.date.toDate) dateStr=d.date.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+let extra='';
+if(d.redeemCode){
+extra=`<div style="background:var(--blue-soft);border:1px solid #bfdbfe;border-radius:8px;padding:8px;margin-top:8px;text-align:center;"><div style="font-size:9.5px;color:var(--blue);font-weight:800;text-transform:uppercase;">Voucher Code</div><div style="font-size:13px;font-family:'Courier New',monospace;font-weight:800;color:var(--text);word-break:break-all;user-select:all;">${d.redeemCode}</div></div>`;
+}else if(d.customData&&Object.keys(d.customData).length){
+extra=`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;">${Object.entries(d.customData).map(([k,v])=>`<span style="background:var(--bg);padding:2px 8px;border-radius:4px;font-size:10.5px;color:var(--muted);font-weight:700;">${k}: <b style="color:var(--text);">${v}</b></span>`).join('')}</div>`;
+}else if(d.playerId&&d.playerId!=='Voucher'){
+extra=`<div style="display:inline-block;background:var(--bg);padding:2px 8px;border-radius:4px;font-size:10.5px;color:var(--muted);font-family:'Courier New',monospace;font-weight:700;">ID: ${d.playerId}</div>`;
+}
+let payBadge='';
+if(d.paymentOption==='wallet'){payBadge=`<span class="pay-badge wallet"><i class="fas fa-wallet"></i> Wallet</span>`;}
+else if(d.paymentOption==='instant'){payBadge=`<span class="pay-badge instant"><i class="fas fa-bolt"></i> ${d.paymentMethod||'Instant'}</span>`;}
+list.innerHTML+=`<div class="order-card ${cls}"><div class="order-card-head"><div><div class="order-card-title"><i class="fas fa-gamepad" style="color:var(--blue);margin-right:5px;font-size:11px;"></i>${d.gameName||'Order'} ${payBadge}</div><div class="order-card-date"><i class="far fa-clock"></i> ${dateStr}</div></div><div class="order-badge ${cls}">${txt}</div></div><div class="order-card-body"><div><div class="order-card-prod">${d.productName}</div>${extra}</div><div class="order-card-price">৳${d.price}</div></div></div>`;
+});
+}).catch(err=>{list.innerHTML=`<div style="text-align:center;color:var(--red);padding:20px;font-size:12px;">Error loading history</div>`;});
+}
+
+/* ============================================================
+   PROFILE EDIT
+   ============================================================ */
+function openEditProfile(){
+if(!currentUser) return;
+const d=currentUserData||{};
+document.getElementById('editName').value=d.name||'';
+document.getElementById('editPhone').value=d.phone||'';
+document.getElementById('editEmail').value=d.email||currentUser.email||'';
+document.getElementById('editPhoto').value=d.photoURL||'';
+document.getElementById('editProfileModal').classList.add('active');
+}
+function closeEditProfile(){document.getElementById('editProfileModal').classList.remove('active');}
+async function saveProfileEdit(){
+const name=document.getElementById('editName').value.trim();
+const phone=document.getElementById('editPhone').value.trim();
+const photo=document.getElementById('editPhoto').value.trim();
+if(!name){showToast('warning','Missing Name','Please enter your full name.');return;}
+const btn=document.getElementById('editProfileSaveBtn');
+btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Saving...';
+try{
+await db.collection('users').doc(currentUser.uid).set({name,phone,photoURL:photo},{merge:true});
+if(photo){try{await currentUser.updateProfile({displayName:name,photoURL:photo});}catch(e){}}
+else{try{await currentUser.updateProfile({displayName:name});}catch(e){}}
+Swal.close();closeEditProfile();
+showToast('success','Profile Updated','Your changes have been saved.');
+}catch(e){Swal.close();w8Error('Update Failed',e.message);}
+btn.disabled=false;btn.innerHTML='<i class="fas fa-save"></i> Save Changes';
+}
+
+/* ============================================================
+   CHANGE PASSWORD
+   ============================================================ */
+function openChangePassword(){
+if(!currentUser) return;
+document.getElementById('pwdOld').value='';
+document.getElementById('pwdNew').value='';
+document.getElementById('pwdConfirm').value='';
+document.getElementById('changePasswordModal').classList.add('active');
+}
+function closeChangePassword(){document.getElementById('changePasswordModal').classList.remove('active');}
+function togglePwdField(id,btn){
+const inp=document.getElementById(id);
+if(inp.type==='password'){inp.type='text';btn.innerHTML='<i class="fas fa-eye-slash"></i>';}
+else{inp.type='password';btn.innerHTML='<i class="fas fa-eye"></i>';}
+}
+async function savePasswordChange(){
+if(!currentUser) return;
+const oldP=document.getElementById('pwdOld').value;
+const newP=document.getElementById('pwdNew').value;
+const confP=document.getElementById('pwdConfirm').value;
+if(!oldP||!newP||!confP){showToast('warning','Missing Fields','Please fill all password fields.');return;}
+if(newP.length<6){showToast('warning','Weak Password','New password must be at least 6 characters.');return;}
+if(newP!==confP){showToast('warning','Mismatch','New passwords do not match.');return;}
+if(oldP===newP){showToast('warning','Same Password','New password must be different from old one.');return;}
+const btn=document.getElementById('pwdSaveBtn');
+btn.disabled=true;btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Updating...';
+try{
+const credential=firebase.auth.EmailAuthProvider.credential(currentUser.email,oldP);
+await currentUser.reauthenticateWithCredential(credential);
+await currentUser.updatePassword(newP);
+Swal.close();closeChangePassword();
+showToast('success','Password Changed','Your password has been updated successfully.');
+}catch(e){
+Swal.close();
+let msg=e.message||'Could not update password.';
+if(e.code==='auth/wrong-password') msg='Current password is incorrect.';
+else if(e.code==='auth/too-many-requests') msg='Too many attempts. Please try again later.';
+else if(e.code==='auth/requires-recent-login') msg='Please sign out and sign in again, then try.';
+w8Error('Update Failed',msg);
+}
+btn.disabled=false;btn.innerHTML='<i class="fas fa-shield-alt"></i> Update Password';
+}
+
+/* ============================================================
+   NOTIFICATIONS
+   ============================================================ */
+function loadNotifications(){
+if(!currentUser) return;
+if(notifUnsubscribe){notifUnsubscribe();notifUnsubscribe=null;}
+const readKey='w8_notif_read_'+currentUser.uid;
+let readList=[];
+try{readList=JSON.parse(localStorage.getItem(readKey)||'[]');}catch(e){}
+notifUnsubscribe=db.collection('notifications').orderBy('date','desc').limit(30).onSnapshot(snap=>{
+const list=[];
+snap.forEach(doc=>list.push({id:doc.id,...doc.data()}));
+renderNotifCount(list,readList);
+renderNotifBody(list,readList);
+},err=>{console.warn('Notification load failed:',err.message);});
+}
+function renderNotifCount(list,readList){
+const unread=list.filter(n=>!readList.includes(n.id));
+const btn=document.getElementById('headerNotifBtn');
+const cnt=document.getElementById('notifCount');
+if(unread.length>0){btn.classList.add('has-unread');cnt.innerText=unread.length>9?'9+':unread.length;}
+else{btn.classList.remove('has-unread');}
+}
+function renderNotifBody(list,readList){
+const body=document.getElementById('notifBody');
+if(!list.length){
+body.innerHTML=`<div class="notif-empty"><i class="fas fa-bell-slash"></i>No notifications yet<br><span style="font-size:11px;color:var(--soft);font-weight:600;">Ei khane important updates asbe</span></div>`;
+return;
+}
+body.innerHTML='';
+list.forEach(n=>{
+const type=(n.type||'info').toLowerCase();
+const iconMap={info:'fa-info-circle',success:'fa-check-circle',warning:'fa-exclamation-triangle',error:'fa-times-circle'};
+const icon=iconMap[type]||iconMap.info;
+let timeStr='';
+if(n.date){
+try{
+const dt=n.date.toDate?n.date.toDate():new Date(n.date);
+const diff=Date.now()-dt.getTime();
+const mins=Math.floor(diff/60000);
+if(mins<1) timeStr='Just now';
+else if(mins<60) timeStr=mins+'m ago';
+else if(mins<1440) timeStr=Math.floor(mins/60)+'h ago';
+else if(mins<10080) timeStr=Math.floor(mins/1440)+'d ago';
+else timeStr=dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}catch(e){}
+}
+body.innerHTML+=`<div class="notif-item type-${type}">
+<div class="notif-item-icon"><i class="fas ${icon}"></i></div>
+<div class="notif-item-content">
+<div class="notif-item-title">${n.title||'Notification'}</div>
+${n.message?`<div class="notif-item-msg">${n.message}</div>`:''}
+${timeStr?`<div class="notif-item-time"><i class="far fa-clock"></i> ${timeStr}</div>`:''}
+</div>
+</div>`;
+});
+}
+function openNotifications(){
+if(!currentUser){showToast('warning','Login Required','Please sign in to view notifications.');return;}
+document.getElementById('notificationsModal').classList.add('active');
+const readKey='w8_notif_read_'+currentUser.uid;
+db.collection('notifications').orderBy('date','desc').limit(30).get().then(snap=>{
+const ids=[];
+snap.forEach(d=>ids.push(d.id));
+try{localStorage.setItem(readKey,JSON.stringify(ids));}catch(e){}
+document.getElementById('headerNotifBtn').classList.remove('has-unread');
+}).catch(()=>{});
+}
+function closeNotifications(){document.getElementById('notificationsModal').classList.remove('active');}
+
+/* ============================================================
+   FAB
+   ============================================================ */
+function toggleFab(){document.getElementById('fabWrap').classList.toggle('open');}
+
+/* Welcome toast */
+window.addEventListener('load',()=>{
+setTimeout(()=>{
+showToast('info','Welcome to GAME BAZAR','Bangladesh\'s premium top up service is ready for you.',4000);
+},1200);
+});
+</script>
+</body>
+</html>

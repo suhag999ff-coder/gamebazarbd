@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function adminDoc() { return get(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+        && (adminDoc().data.enabled == true || adminDoc().data.active == true);
+    }
+    match /settings/telegram { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /settings/{docId} { allow read: if true; allow write: if isAdmin(); }
+    match /admins/{uid} { allow read: if signedIn() && (request.auth.uid == uid || isAdmin()); allow write: if false; }
+    match /admin/payment { allow read: if signedIn(); allow write: if isAdmin(); }
+    match /users/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create: if signedIn() && request.auth.uid == uid;
+      allow update: if isAdmin() || (signedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','phone','lastLogin']));
+      allow delete: if isAdmin();
+    }
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+    match /deposits/{depositId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+    match /chats/{uid} {
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
+      allow write: if isAdmin() || (signedIn() && request.auth.uid == uid);
+      match /messages/{msgId} {
+        allow read: if isAdmin() || (signedIn() && request.auth.uid == uid);
+        allow create: if isAdmin() || (signedIn() && request.auth.uid == uid);
+        allow update, delete: if isAdmin();
+      }
+    }
+    match /{collection}/{docId} {
+      allow read: if collection in ['games','categories','packages','products','ranks','codes','banners','tutorials','services','used_transactions'] && signedIn();
+      allow write: if isAdmin();
+    }
+  }
+}

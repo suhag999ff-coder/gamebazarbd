@@ -1,0 +1,15 @@
+{
+  "indexes": [
+    { "collectionGroup": "orders", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "userId", "order": "ASCENDING" },
+        { "fieldPath": "date", "order": "DESCENDING" }
+      ] },
+    { "collectionGroup": "notif_log", "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "uid", "order": "ASCENDING" },
+        { "fieldPath": "time", "order": "ASCENDING" }
+      ] }
+  ],
+  "fieldOverrides": []
+}

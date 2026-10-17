@@ -11,6 +11,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<!-- CSS লিংক -->
 <link rel="stylesheet" href="css/user.css">
 </head>
 <body class="select-none">
@@ -20,15 +21,18 @@
   <div class="auth-card">
     <h1 class="auth-brand">GAME <span>BAZAR</span></h1>
     <p class="auth-tagline">Premium Top-Up Service</p>
+    
     <div class="auth-tabs">
       <button type="button" onclick="toggleAuth('login')" id="btn-login-view" class="auth-tab on"><i class="fas fa-sign-in-alt"></i> Login</button>
       <button type="button" onclick="toggleAuth('register')" id="btn-reg-view" class="auth-tab"><i class="fas fa-user-plus"></i> Register</button>
     </div>
+    
     <div id="login-form">
       <div class="auth-field"><input type="email" id="login-email" placeholder="Email Address" class="auth-input"><i class="fas fa-envelope auth-icon"></i></div>
       <div class="auth-field"><input type="password" id="login-pass" placeholder="Password" class="auth-input"><i class="fas fa-lock auth-icon"></i></div>
       <button type="button" onclick="handleLogin()" class="auth-btn"><i class="fas fa-sign-in-alt"></i> LOG IN</button>
     </div>
+    
     <div id="register-form" class="hidden">
       <div class="auth-field"><input type="text" id="reg-name" placeholder="Full Name" class="auth-input"><i class="fas fa-user auth-icon"></i></div>
       <div class="auth-field"><input type="email" id="reg-email" placeholder="Email Address" class="auth-input"><i class="fas fa-envelope auth-icon"></i></div>
@@ -72,11 +76,7 @@
   </nav>
 </div>
 
-<script type="module">
-  import { db, auth } from './js/firebase-config.js';
-  import { notify } from './js/telegram.js';
-  window.__db = db; window.__auth = auth; window.__notify = notify;
-</script>
+<!-- JS লিংক -->
 <script src="js/user.js"></script>
 </body>
 </html>

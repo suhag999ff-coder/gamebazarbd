@@ -12,7 +12,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <!-- CSS লিংক -->
-<link rel="stylesheet" href="css/user.css">
+<link rel="stylesheet" href="/assets/css/user.css">
 </head>
 <body class="select-none">
 
@@ -78,9 +78,9 @@
 
 <!-- Firebase config initializes the compat SDK before the user panel script -->
 <script type="module">
-  import { db, auth } from './js/firebase-config.js';
+  import { db, auth } from '/assets/js/firebase-config.js';
   window.__db = db; window.__auth = auth;
 </script>
-<script src="js/user.js"></script>
+<script src="/assets/js/user.js"></script>
 </body>
 </html>

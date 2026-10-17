@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#6366f1">
+<title>GAME BAZAR · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="loginSec" class="login-page">
+  <div class="login-card">
+    <div class="login-logo"><i class="fas fa-gamepad"></i><span class="live-dot"></span></div>
+    <h2 class="login-brand">GAME <span>BAZAR</span></h2>
+    <p class="login-tag">Premium Admin Panel</p>
+    <form onsubmit="event.preventDefault();adminLogin();">
+      <div class="input-group"><i class="fas fa-envelope"></i><input type="email" id="adminEmail" placeholder="Admin Email" required></div>
+      <div class="input-group"><i class="fas fa-lock"></i><input type="password" id="adminPass" placeholder="Password" required></div>
+      <button type="submit" class="btn-primary w-full"><i class="fas fa-sign-in-alt"></i> SIGN IN</button>
+    </form>
+    <p class="login-foot"><i class="fas fa-lock"></i> Secure Admin Access</p>
+  </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel" class="hidden admin-shell">
+  <header class="admin-header">
+    <div class="header-left">
+      <button onclick="openDrawer()" class="icon-btn"><i class="fas fa-bars"></i></button>
+      <div>
+        <h1 class="header-brand">GAME <span>BAZAR</span></h1>
+        <p class="header-sub">Admin Panel</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="badge-live"><i class="fas fa-circle"></i> Live</span>
+      <button onclick="logout()" class="icon-btn danger"><i class="fas fa-power-off"></i></button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+
+    <!-- DASHBOARD -->
+    <section id="v-dashboard" class="view">
+      <div class="view-head"><p class="eyebrow">Welcome back</p><h2>Dashboard Overview</h2></div>
+      <div class="stats-grid">
+        <div class="stat-card" onclick="nav('deposits')"><div class="stat-icon purple"><i class="fas fa-coins"></i></div><p class="stat-label">Pending Deposits</p><h3 id="s-dep" class="stat-value">0</h3></div>
+        <div class="stat-card" onclick="nav('orders')"><div class="stat-icon blue"><i class="fas fa-box"></i></div><p class="stat-label">Pending Orders</p><h3 id="s-ord" class="stat-value">0</h3></div>
+        <div class="stat-card" onclick="nav('users')"><div class="stat-icon green"><i class="fas fa-users"></i></div><p class="stat-label">Total Users</p><h3 id="s-usr" class="stat-value">0</h3></div>
+        <div class="stat-card" onclick="nav('chat')"><div class="stat-icon amber"><i class="fas fa-comments"></i></div><p class="stat-label">Unread Chats</p><h3 id="s-chat" class="stat-value">0</h3></div>
+      </div>
+      <h3 class="section-title">Quick Actions</h3>
+      <div class="quick-grid">
+        <button onclick="nav('deposits')" class="quick-btn"><div class="quick-icon purple"><i class="fas fa-wallet"></i></div><span>Deposits</span></button>
+        <button onclick="nav('orders')" class="quick-btn"><div class="quick-icon blue"><i class="fas fa-box"></i></div><span>Orders</span></button>
+        <button onclick="nav('games')" class="quick-btn"><div class="quick-icon green"><i class="fas fa-gamepad"></i></div><span>Games</span></button>
+        <button onclick="nav('settings')" class="quick-btn"><div class="quick-icon amber"><i class="fas fa-cog"></i></div><span>Setup</span></button>
+      </div>
+    </section>
+
+    <!-- DEPOSITS -->
+    <section id="v-deposits" class="view hidden">
+      <div class="view-head"><h2>Deposit Requests</h2><p>Approve or reject user deposits</p></div>
+      <div class="tab-bar">
+        <button onclick="filterDep('all')" id="df-all" class="tab on">All</button>
+        <button onclick="filterDep('pending')" id="df-pending" class="tab">Pending</button>
+        <button onclick="filterDep('approved')" id="df-approved" class="tab">Approved</button>
+        <button onclick="filterDep('rejected')" id="df-rejected" class="tab">Rejected</button>
+      </div>
+      <div id="depList"></div>
+    </section>
+
+    <!-- ORDERS -->
+    <section id="v-orders" class="view hidden">
+      <div class="view-head"><h2>Game Orders</h2><p>Manage user orders</p></div>
+      <div class="tab-bar">
+        <button onclick="filterOrd('all')" id="of-all" class="tab on">All</button>
+        <button onclick="filterOrd('pending')" id="of-pending" class="tab">Pending</button>
+        <button onclick="filterOrd('success')" id="of-success" class="tab">Done</button>
+        <button onclick="filterOrd('refunded')" id="of-refunded" class="tab">Refunded</button>
+      </div>
+      <div id="ordList"></div>
+    </section>
+
+    <!-- USERS -->
+    <section id="v-users" class="view hidden">
+      <div class="view-head"><h2>User Management</h2><p>Manage users & balances</p></div>
+      <div class="search-box"><i class="fas fa-search"></i><input type="text" id="userSearch" oninput="searchUser()" placeholder="Search users..."></div>
+      <div id="usrList"></div>
+    </section>
+
+    <!-- CHAT -->
+    <section id="v-chat" class="view hidden">
+      <div id="chatListView">
+        <div class="view-head"><h2>Live Support</h2><p>Chat with users in real-time</p></div>
+        <div id="chatRooms"></div>
+      </div>
+      <div id="chatThreadView" class="hidden">
+        <div class="chat-thread-head">
+          <button onclick="closeChatThread()" class="icon-btn"><i class="fas fa-arrow-left"></i></button>
+          <div class="chat-avatar"><i class="fas fa-user"></i></div>
+          <div class="chat-info"><h3 id="chatName">User</h3><p id="chatEmail">email</p></div>
+        </div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="chat-input-bar">
+          <input type="text" id="chatInput" placeholder="Reply..." onkeydown="if(event.key==='Enter')sendAdminMsg()">
+          <button onclick="sendAdminMsg()" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section id="v-categories" class="view hidden">
+      <div class="view-head"><h2>Categories</h2><p>Organize games</p></div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-plus"></i> New Category</div>
+        <input type="text" id="newCatName" placeholder="Category Name" class="mb-2">
+        <input type="number" id="newCatSlot" placeholder="Display Slot" class="mb-2">
+        <button onclick="addCat()" class="btn-primary w-full"><i class="fas fa-plus"></i> Add Category</button>
+      </div>
+      <div id="catList"></div>
+    </section>
+
+    <!-- GAMES -->
+    <section id="v-games" class="view hidden">
+      <div id="gamesMain">
+        <div class="view-head"><h2>Games & Packages</h2><p>Manage games and products</p></div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-gamepad"></i> Create New Game</div>
+          <input type="text" id="newGameName" placeholder="Game Name" class="mb-2">
+          <div class="grid-2 mb-2">
+            <select id="newGameType"><option value="uid">UID TopUp</option><option value="code">Voucher</option><option value="auto-topup">Auto</option></select>
+            <select id="newGameCat"><option value="">Category</option></select>
+          </div>
+          <input type="text" id="newGameImg" placeholder="Image URL" class="mb-2">
+          <textarea id="newGameRules" placeholder="Rules (optional)" class="mb-2" style="height:60px"></textarea>
+          <button onclick="addGame()" class="btn-primary w-full"><i class="fas fa-plus"></i> Create Game</button>
+        </div>
+        <div id="gamesGrid"></div>
+      </div>
+      <div id="productsMgr" class="hidden">
+        <div class="chat-thread-head">
+          <button onclick="closeMgr()" class="icon-btn"><i class="fas fa-arrow-left"></i></button>
+          <div style="flex:1"><h3 id="pmTitle">Game</h3><p id="pmType" class="text-primary-l">Products</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-plus"></i> Add Package</div>
+          <input type="text" id="pkgName" placeholder="Package Name" class="mb-2">
+          <div class="flex gap-2">
+            <input type="number" id="pkgPrice" placeholder="Price ৳" style="flex:1">
+            <button onclick="addPkg()" class="btn-primary"><i class="fas fa-plus"></i> Add</button>
+          </div>
+        </div>
+        <div id="voucherSec" class="card hidden">
+          <div class="card-title"><i class="fas fa-ticket"></i> Upload Vouchers</div>
+          <select id="vPkgTarget" class="mb-2"><option value="">Select Product</option></select>
+          <textarea id="vCodes" placeholder="One code per line" style="height:90px" class="mb-2"></textarea>
+          <button onclick="uploadVouchers()" class="btn-success w-full"><i class="fas fa-upload"></i> Upload</button>
+        </div>
+        <div id="pkgList"></div>
+      </div>
+    </section>
+
+    <!-- BANNERS -->
+    <section id="v-banners" class="view hidden">
+      <div class="view-head"><h2>Banners</h2><p>Home page sliders</p></div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-image"></i> Add Banner</div>
+        <input type="text" id="bannerUrl" placeholder="Image URL" class="mb-2">
+        <input type="text" id="bannerLink" placeholder="Link (optional)" class="mb-2">
+        <button onclick="addBanner()" class="btn-primary w-full"><i class="fas fa-plus"></i> Add Banner</button>
+      </div>
+      <div id="bannerList"></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="v-settings" class="view hidden">
+      <div class="view-head"><h2>Settings</h2><p>Configure your app</p></div>
+
+      <!-- APP STATUS -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-power-off"></i> App Status</div>
+        <div class="toggle-row">
+          <div><p id="onlineTxt" class="font-bold">Online</p><p class="text-xs text-muted">Toggle to close app</p></div>
+          <label class="switch"><input type="checkbox" id="onlineTog" onchange="toggleOnline()" checked><span class="slider"></span></label>
+        </div>
+        <textarea id="offlineMsg" placeholder="Offline message" style="height:60px" class="mt-2 mb-2">We are upgrading. Please come back soon!</textarea>
+        <button onclick="saveOfflineMsg()" class="btn-ghost w-full"><i class="fas fa-save"></i> Save Message</button>
+      </div>
+
+      <!-- PAYMENT NUMBERS -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-phone"></i> Payment Numbers</div>
+        <div class="num-row"><span class="num-label pink">bKash</span><input type="text" id="setBkash" placeholder="01XXXXXXXXX"></div>
+        <div class="num-row"><span class="num-label amber">Nagad</span><input type="text" id="setNagad" placeholder="01XXXXXXXXX"></div>
+        <div class="num-row"><span class="num-label purple">Rocket</span><input type="text" id="setRocket" placeholder="01XXXXXXXXX"></div>
+        <button onclick="saveNumbers()" class="btn-primary w-full mt-3"><i class="fas fa-save"></i> Save Numbers</button>
+      </div>
+
+      <!-- TELEGRAM DUAL ALERTS -->
+      <div class="card">
+        <div class="card-title">
+          <i class="fab fa-telegram" style="color:#38bdf8"></i> Telegram Dual Alerts
+          <span id="tgBadge" class="badge-off">Not Configured</span>
+        </div>
+        <p class="text-xs text-muted mb-3">নতুন ইউজার, লগইন, ডিপোজিট, অর্ডার ও চ্যাট — সব notification ২টি Chat ID-তে যাবে।</p>
+        <label class="field-label">Bot Token</label>
+        <div class="input-with-btn">
+          <input type="password" id="setTgToken" placeholder="1234567890:AAH_xxx..." class="font-mono">
+          <button type="button" onclick="toggleTgToken()" class="eye-btn"><i class="fas fa-eye" id="tgEye"></i></button>
+        </div>
+        <p id="tgTokenStatus" class="text-xs text-muted mt-1"><i class="fas fa-circle"></i> Token status: যাচাই হয়নি</p>
+
+        <label class="field-label mt-3">Chat ID 1 (Admin Private)</label>
+        <input type="text" id="setTgChat1" placeholder="123456789" class="font-mono mb-2">
+        <label class="field-label">Chat ID 2 (Group/Channel)</label>
+        <input type="text" id="setTgChat2" placeholder="-1001234567890" class="font-mono">
+
+        <div class="grid-3 mt-3">
+          <button onclick="saveTelegram()" class="btn-primary text-xs"><i class="fas fa-save"></i> Save</button>
+          <button onclick="testTelegram('chat1')" class="btn-ghost text-xs purple-text"><i class="fas fa-paper-plane"></i> Test 1</button>
+          <button onclick="testTelegram('chat2')" class="btn-ghost text-xs blue-text"><i class="fas fa-paper-plane"></i> Test 2</button>
+        </div>
+        <div class="info-box purple mt-3"><i class="fas fa-shield-halved"></i><span>Save + Test 1 + Test 2 = Done!</span></div>
+      </div>
+
+      <!-- BRANDING -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-tag"></i> Branding</div>
+        <input type="text" id="setSiteName" placeholder="Site Name" class="mb-2">
+        <input type="text" id="setLogo" placeholder="Logo URL" class="mb-2">
+        <textarea id="setNotice" placeholder="Notice" style="height:60px" class="mb-2"></textarea>
+        <div class="grid-2 mb-2">
+          <input type="text" id="setTelegram" placeholder="Telegram Link">
+          <input type="text" id="setWhatsapp" placeholder="WhatsApp Number">
+        </div>
+        <div class="grid-3 mb-2">
+          <input type="text" id="setFb" placeholder="Facebook">
+          <input type="text" id="setInsta" placeholder="Instagram">
+          <input type="text" id="setYt" placeholder="YouTube">
+        </div>
+        <button onclick="saveConfig()" class="btn-primary w-full"><i class="fas fa-save"></i> Save All</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- USER MODAL -->
+  <div id="userModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><div class="modal-icon"><i class="fas fa-user"></i></div><h3 id="mEmail">user@email.com</h3><p id="mUid" class="font-mono">...</p></div>
+      <div class="grid-2 mb-3">
+        <div class="mini-stat"><p>Balance</p><h4>৳<span id="mBal">0</span></h4></div>
+        <div class="mini-stat"><p>Orders</p><h4 id="mOrd">0</h4></div>
+      </div>
+      <div class="card-inner">
+        <label class="field-label"><i class="fas fa-coins"></i> Adjust Balance</label>
+        <div class="flex gap-2"><input type="number" id="balAmt" placeholder="Amount" style="flex:1"><button onclick="updateBal()" class="btn-primary">APPLY</button></div>
+      </div>
+      <button onclick="closeUserModal()" class="btn-ghost w-full mt-3">Close</button>
+    </div>
+  </div>
+
+  <!-- DRAWER -->
+  <div id="drawerOv" class="drawer-overlay" onclick="closeDrawer()"></div>
+  <div id="drawer" class="drawer">
+    <div class="drawer-head"><div class="drawer-logo"><i class="fas fa-gamepad"></i></div><div><h2>GAME <span>BAZAR</span></h2><p>Admin Panel</p></div></div>
+    <div class="drawer-body">
+      <p class="drawer-section">Navigation</p>
+      <button onclick="nav('dashboard');closeDrawer();" class="drawer-item"><i class="fas fa-chart-line"></i> Dashboard</button>
+      <button onclick="nav('deposits');closeDrawer();" class="drawer-item"><i class="fas fa-wallet"></i> Deposits</button>
+      <button onclick="nav('orders');closeDrawer();" class="drawer-item"><i class="fas fa-box"></i> Orders</button>
+      <button onclick="nav('users');closeDrawer();" class="drawer-item"><i class="fas fa-users"></i> Users</button>
+      <button onclick="nav('chat');closeDrawer();" class="drawer-item"><i class="fas fa-comments"></i> Live Chat</button>
+      <p class="drawer-section">Management</p>
+      <button onclick="nav('categories');closeDrawer();" class="drawer-item"><i class="fas fa-layer-group"></i> Categories</button>
+      <button onclick="nav('games');closeDrawer();" class="drawer-item"><i class="fas fa-gamepad"></i> Games</button>
+      <button onclick="nav('banners');closeDrawer();" class="drawer-item"><i class="fas fa-image"></i> Banners</button>
+      <p class="drawer-section">Account</p>
+      <button onclick="nav('settings');closeDrawer();" class="drawer-item"><i class="fas fa-cog"></i> Settings</button>
+      <button onclick="logout();closeDrawer();" class="drawer-item red"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <div class="nav-scroll">
+      <button onclick="nav('dashboard')" id="nb-dashboard" class="nav-btn on"><i class="fas fa-chart-line"></i><span>Dash</span></button>
+      <button onclick="nav('deposits')" id="nb-deposits" class="nav-btn"><i class="fas fa-wallet"></i><span>Deposit</span></button>
+      <button onclick="nav('orders')" id="nb-orders" class="nav-btn"><i class="fas fa-box"></i><span>Orders</span></button>
+      <button onclick="nav('users')" id="nb-users" class="nav-btn"><i class="fas fa-users"></i><span>Users</span></button>
+      <button onclick="nav('chat')" id="nb-chat" class="nav-btn"><i class="fas fa-comments"></i><span>Chat</span><span id="chatBadge" class="badge-dot hidden">0</span></button>
+      <button onclick="nav('categories')" id="nb-categories" class="nav-btn"><i class="fas fa-layer-group"></i><span>Cat</span></button>
+      <button onclick="nav('games')" id="nb-games" class="nav-btn"><i class="fas fa-gamepad"></i><span>Games</span></button>
+      <button onclick="nav('banners')" id="nb-banners" class="nav-btn"><i class="fas fa-image"></i><span>Banner</span></button>
+      <button onclick="nav('settings')" id="nb-settings" class="nav-btn"><i class="fas fa-cog"></i><span>Setup</span></button>
+    </div>
+  </nav>
+</div>
+
+<script src="/assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#006a4e">
+<title>GAME BAZAR — Admin Panel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="select-none">
+
+<!-- LOGIN -->
+<section id="login-sec" class="z-50">
+  <div class="login-scene">
+    <div class="bd-flag-showcase" aria-hidden="true">
+      <div class="pole"></div><div class="cloth"></div>
+    </div>
+    <div class="auth-card">
+      <h1 class="auth-brand">GAME <span>BAZAR</span></h1>
+      <p class="auth-tagline">Admin Control Panel</p>
+      <form onsubmit="event.preventDefault();adminLogin();">
+        <div class="auth-field">
+          <input type="email" id="admin-email" placeholder="Admin Email" class="auth-input" autocomplete="email">
+          <i class="fas fa-envelope auth-icon"></i>
+        </div>
+        <div class="auth-field">
+          <input type="password" id="admin-pass" placeholder="Password" class="auth-input" autocomplete="current-password">
+          <i class="fas fa-lock auth-icon"></i>
+          <button type="button" onclick="togglePass('admin-pass',this)" class="auth-eye-btn"><i class="fas fa-eye"></i></button>
+        </div>
+        <button type="submit" class="auth-btn"><i class="fas fa-sign-in-alt"></i> LOG IN</button>
+      </form>
+      <p class="text-center text-[10px] text-gray-400 mt-5"><i class="fas fa-shield-halved"></i> Authorized personnel only</p>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN APP -->
+<div id="admin-app" class="app-shell hidden">
+  <header class="bg-white sticky top-0 z-40 shadow-sm border-b border-gray-100">
+    <div class="px-4 py-2.5 flex justify-between items-center gap-3">
+      <div class="min-w-0">
+        <h1 class="text-base font-black text-[#003d2d] leading-tight">GAME <span class="text-[#f42a41]">BAZAR</span></h1>
+        <p class="text-[9px] font-bold uppercase tracking-widest text-gray-400">Admin Panel</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5 bg-green-50 border border-green-100 px-2.5 py-1.5 rounded-full">
+          <span class="w-1.5 h-1.5 bg-green-500 rounded-full live-dot"></span>
+          <span class="text-[10px] font-extrabold text-green-700">LIVE</span>
+        </div>
+        <button type="button" onclick="adminLogout()" class="w-9 h-9 rounded-full bg-red-50 flex items-center justify-center text-red-500">
+          <i class="fas fa-power-off text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- DASHBOARD -->
+    <section id="view-dashboard" class="sect p-3">
+      <div class="bd-flag-banner">
+        <div class="bd-banner-text">
+          <div class="bd-banner-title">🇧🇩 GAME BAZAR ADMIN</div>
+          <div class="bd-banner-sub">Welcome back, <span id="dash-welcome">Admin</span></div>
+          <div class="bd-banner-badge"><i class="fas fa-shield-halved text-[8px]"></i> Secure Dashboard</div>
+        </div>
+        <div class="bd-flag-live"><div class="pole"></div><div class="cloth"></div></div>
+      </div>
+      <div class="revenue-card"><div class="revenue-content">
+        <div class="revenue-label"><i class="fas fa-coins text-amber-200"></i><span>Total Revenue</span></div>
+        <div class="revenue-amount" id="dash-revenue">৳ 0</div>
+        <div class="revenue-split">
+          <div class="revenue-split-item"><div class="lbl">Approved Deposits</div><div class="val" id="dash-total-dep">৳ 0</div></div>
+          <div class="revenue-split-item"><div class="lbl">Today's Orders</div><div class="val" id="dash-today-orders">0</div></div>
+        </div>
+      </div></div>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="stat-card-pro"><div class="stat-icon" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46"><i class="fas fa-users"></i></div><p class="stat-label">Total Users</p><p class="stat-value text-[#065f46]" id="dash-users">0</p></div>
+        <div class="stat-card-pro"><div class="stat-icon" style="background:linear-gradient(135deg,#fce7f3,#fbcfe8);color:#9d174d"><i class="fas fa-shopping-bag"></i></div><p class="stat-label">Total Orders</p><p class="stat-value text-[#9d174d]" id="dash-orders">0</p></div>
+        <div class="stat-card-pro"><div class="stat-icon" style="background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e"><i class="fas fa-clock"></i></div><p class="stat-label">Pending Deposits</p><p class="stat-value text-amber-600" id="dash-pending-dep">0</p></div>
+        <div class="stat-card-pro"><div class="stat-icon" style="background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46"><i class="fas fa-check-double"></i></div><p class="stat-label">Pending Orders</p><p class="stat-value text-emerald-600" id="dash-pending-ord">0</p></div>
+      </div>
+
+      <div class="section-title">Content Management</div>
+      <div class="controls-grid mb-5">
+        <button type="button" onclick="navTo('categories')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#006a4e,#00875f)"><i class="fas fa-layer-group"></i></div><div class="cinfo"><div class="ct">Categories</div><div class="cs">Product groups</div></div></button>
+        <button type="button" onclick="navTo('products')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#0d9488,#14b8a6)"><i class="fas fa-gamepad"></i></div><div class="cinfo"><div class="ct">Games</div><div class="cs">Products list</div></div></button>
+        <button type="button" onclick="navTo('banners')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#0891b2,#06b6d4)"><i class="fas fa-images"></i></div><div class="cinfo"><div class="ct">Banners</div><div class="cs">Slider images</div></div></button>
+        <button type="button" onclick="navTo('codes')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#059669,#10b981)"><i class="fas fa-ticket-alt"></i></div><div class="cinfo"><div class="ct">Redeem Codes</div><div class="cs">Gift codes</div></div></button>
+      </div>
+
+      <div class="section-title">Payments & Rewards</div>
+      <div class="controls-grid mb-5">
+        <button type="button" onclick="navTo('deposits')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#f59e0b,#f97316)"><i class="fas fa-wallet"></i></div><div class="cinfo"><div class="ct">Deposits</div><div class="cs">Approve requests</div></div></button>
+        <button type="button" onclick="openSettingPage('payment')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#e2136e,#a21a54)"><i class="fas fa-credit-card"></i></div><div class="cinfo"><div class="ct">Numbers</div><div class="cs">bKash/Nagad/Rocket</div></div></button>
+        <button type="button" onclick="openSettingPage('logos')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#7c3aed,#a855f7)"><i class="fas fa-image"></i></div><div class="cinfo"><div class="ct">Pay Logos</div><div class="cs">Method logos</div></div></button>
+        <button type="button" onclick="navTo('ranks')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#d97706,#f59e0b)"><i class="fas fa-medal"></i></div><div class="cinfo"><div class="ct">Rank System</div><div class="cs">Levels & rewards</div></div></button>
+      </div>
+
+      <div class="section-title">Users & Orders</div>
+      <div class="controls-grid mb-5">
+        <button type="button" onclick="navTo('users')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#0891b2,#06b6d4)"><i class="fas fa-users"></i></div><div class="cinfo"><div class="ct">Users</div><div class="cs">Manage accounts</div></div></button>
+        <button type="button" onclick="navTo('orders')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#3b82f6,#2563eb)"><i class="fas fa-shopping-bag"></i></div><div class="cinfo"><div class="ct">Orders</div><div class="cs">All transactions</div></div></button>
+      </div>
+
+      <div class="section-title">Site Settings</div>
+      <div class="controls-grid mb-5">
+        <button type="button" onclick="openSettingPage('branding')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#006a4e,#00875f)"><i class="fas fa-paint-brush"></i></div><div class="cinfo"><div class="ct">Branding</div><div class="cs">Site name, logos</div></div></button>
+        <button type="button" onclick="openSettingPage('telegram')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#0088cc,#006699)"><i class="fab fa-telegram"></i></div><div class="cinfo"><div class="ct">Telegram Alerts</div><div class="cs">Bot notifications</div></div></button>
+        <button type="button" onclick="openSettingPage('popup')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#f97316,#c2410c)"><i class="fas fa-bullhorn"></i></div><div class="cinfo"><div class="ct">Promo Popup</div><div class="cs">Announcement</div></div></button>
+        <button type="button" onclick="openSettingPage('support')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#8b5cf6,#6d28d9)"><i class="fas fa-headset"></i></div><div class="cinfo"><div class="ct">Support Buttons</div><div class="cs">Floating bubbles</div></div></button>
+        <button type="button" onclick="openSettingPage('general')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#64748b,#334155)"><i class="fas fa-cog"></i></div><div class="cinfo"><div class="ct">General</div><div class="cs">Notice, video</div></div></button>
+        <button type="button" onclick="openSettingPage('social')" class="control-btn"><div class="ci" style="background:linear-gradient(135deg,#06b6d4,#0e7490)"><i class="fas fa-share-nodes"></i></div><div class="cinfo"><div class="ct">Social Links</div><div class="cs">FB / TG / YT</div></div></button>
+      </div>
+
+      <div class="section-title">Recent Activity</div>
+      <div id="dash-recent"></div>
+      <div class="card mt-4" style="border-color:#fee2e2">
+        <div class="card-title" style="color:#dc2626"><i class="fas fa-exclamation-triangle" style="color:#dc2626"></i> Danger Zone</div>
+        <button type="button" onclick="adminLogout()" class="btn-danger"><i class="fas fa-power-off"></i> Log Out</button>
+      </div>
+    </section>
+
+    <!-- DEPOSITS -->
+    <section id="view-deposits" class="hidden sect p-3">
+      <h2 class="text-lg font-black text-[#003d2d] mb-3">Deposits</h2>
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-2">
+        <button type="button" onclick="filterDeposits('pending')" id="dep-tab-pending" class="tab-pill on">Pending</button>
+        <button type="button" onclick="filterDeposits('approved')" id="dep-tab-approved" class="tab-pill">Approved</button>
+        <button type="button" onclick="filterDeposits('rejected')" id="dep-tab-rejected" class="tab-pill">Rejected</button>
+      </div>
+      <div id="deposits-list"></div>
+    </section>
+
+    <!-- ORDERS -->
+    <section id="view-orders" class="hidden sect p-3">
+      <h2 class="text-lg font-black text-[#003d2d] mb-3">Orders</h2>
+      <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2 mb-2">
+        <button type="button" onclick="filterOrders('pending')" id="ord-tab-pending" class="tab-pill on">Pending</button>
+        <button type="button" onclick="filterOrders('success')" id="ord-tab-success" class="tab-pill">Completed</button>
+        <button type="button" onclick="filterOrders('refunded')" id="ord-tab-refunded" class="tab-pill">Refunded</button>
+        <button type="button" onclick="filterOrders('all')" id="ord-tab-all" class="tab-pill">All</button>
+      </div>
+      <div id="orders-list"></div>
+    </section>
+
+    <!-- USERS -->
+    <section id="view-users" class="hidden sect p-3">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-black text-[#003d2d]">Users</h2>
+        <button type="button" onclick="openCreateUser()" class="flex items-center gap-1.5 bg-gradient-to-r from-[#006a4e] to-[#00875f] text-white px-3 py-1.5 rounded-full text-[10.5px] font-extrabold shadow-md"><i class="fas fa-plus text-[9px]"></i> Add</button>
+      </div>
+      <div class="relative mb-3"><input type="text" id="user-search" onkeyup="searchUser()" placeholder="Search users..." class="inp pl-9"><i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i></div>
+      <div id="users-list"></div>
+    </section>
+
+    <!-- CATEGORIES -->
+    <section id="view-categories" class="hidden sect p-3">
+      <h2 class="text-lg font-black text-[#003d2d] mb-3">Categories</h2>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-plus-circle"></i> Create Category</div>
+        <div class="field"><label class="field-label">Category Name</label><input type="text" id="cat-name" placeholder="e.g. Free Fire" class="inp"></div>
+        <div class="field"><label class="field-label">Display Order</label><input type="number" id="cat-order" placeholder="e.g. 1" class="inp"></div>
+        <button type="button" onclick="addCategory()" class="btn-navy mt-1"><i class="fas fa-plus"></i> Add Category</button>
+      </div>
+      <div class="section-title">All Categories</div>
+      <div id="categories-list"></div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="view-products" class="hidden sect p-3">
+      <div id="products-main-view">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-black text-[#003d2d]">Games / Products</h2>
+          <button type="button" onclick="openCreateProduct()" class="flex items-center gap-1.5 bg-gradient-to-r from-[#006a4e] to-[#00875f] text-white px-3 py-1.5 rounded-full text-[10.5px] font-extrabold shadow-md"><i class="fas fa-plus text-[9px]"></i> Add</button>
+        </div>
+        <div id="products-grid-list"></div>
+      </div>
+      <div id="packages-manager-view" class="hidden">
+        <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 mb-3 flex items-center gap-3">
+          <button type="button" onclick="closePackagesView()" class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-600"><i class="fas fa-arrow-left text-sm"></i></button>
+          <div class="min-w-0 flex-1"><h3 id="pm-game-title" class="font-extrabold text-[#003d2d] text-sm truncate">Game</h3><p class="text-[10px] text-[#006a4e] font-bold uppercase tracking-widest flex items-center gap-1.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full live-dot"></span> Live Packages</p></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fas fa-box-open"></i> Add Package</div>
+          <div class="field"><label class="field-label">Package Name</label><input type="text" id="pkg-name" placeholder="e.g. 100 Diamonds" class="inp"></div>
+          <div class="field"><label class="field-label">Price (৳)</label><input type="number" id="pkg-price" placeholder="0" class="inp"></div>
+          <div class="field"><label class="field-label">Icon URL (optional)</label><input type="text" id="pkg-icon" placeholder="Auto-detect if empty" class="inp"></div>
+          <button type="button" id="pkg-add-btn" onclick="addPackage()" class="btn-pink mt-1"><i class="fas fa-plus"></i> Add Package</button>
+        </div>
+        <div class="section-title">All Packages <span id="pkg-count" class="text-[#006a4e]"></span></div>
+        <div id="packages-list"></div>
+      </div>
+    </section>
+
+    <!-- BANNERS -->
+    <section id="view-banners" class="hidden sect p-3">
+      <h2 class="text-lg font-black text-[#003d2d] mb-3">Banners</h2>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-image"></i> Add Banner</div>
+        <div class="field"><label class="field-label">Banner Image URL</label><input type="text" id="banner-url" placeholder="https://..." class="inp"></div>
+        <button type="button" onclick="addBanner()" class="btn-navy mt-1"><i class="fas fa-plus"></i> Upload Banner</button>
+      </div>
+      <div class="section-title">All Banners</div>
+      <div id="banners-list"></div>
+    </section>
+
+    <!-- RANKS -->
+    <section id="view-ranks" class="hidden sect p-3">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-black text-[#003d2d]">Rank Management</h2>
+        <button type="button" onclick="loadDefaultRanks()" class="flex items-center gap-1.5 bg-gradient-to-r from-[#006a4e] to-[#00875f] text-white px-3 py-1.5 rounded-full text-[10.5px] font-extrabold shadow-md"><i class="fas fa-magic text-[9px]"></i> Load Defaults</button>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-plus-circle"></i> <span id="rank-form-title">Create New Rank</span></div>
+        <input type="hidden" id="rk-edit-index" value="-1">
+        <div class="field"><label class="field-label">Rank Name *</label><input type="text" id="rk-name" placeholder="e.g. Diamond" class="inp" oninput="updateRankPreview()"></div>
+        <div class="field"><label class="field-label">Rank Icon PNG URL *</label><input type="text" id="rk-image" placeholder="https://..." class="inp" oninput="updateRankPreview()"></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="field"><label class="field-label">Min Spend (৳)</label><input type="number" id="rk-min" placeholder="0" class="inp"></div>
+          <div class="field"><label class="field-label">Max Spend (৳)</label><input type="number" id="rk-max" placeholder="1000" class="inp"></div>
+        </div>
+        <div class="field"><label class="field-label">Tagline</label><input type="text" id="rk-tagline" placeholder="Short description" class="inp"></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="field"><label class="field-label">Fallback FA Icon</label><input type="text" id="rk-icon" placeholder="fa-medal" value="fa-medal" class="inp"></div>
+          <div class="field"><label class="field-label">Color (hex)</label><input type="text" id="rk-color" placeholder="#006a4e" value="#006a4e" class="inp"></div>
+        </div>
+        <div class="flex gap-2 mt-1">
+          <button type="button" onclick="resetRankForm()" class="btn-ghost" style="flex:1"><i class="fas fa-undo"></i> Reset</button>
+          <button type="button" id="rk-save-btn" onclick="saveRank()" class="btn-pink" style="flex:2"><i class="fas fa-save"></i> Save Rank</button>
+        </div>
+      </div>
+      <div class="section-title">All Ranks <span id="ranks-count" class="text-[#006a4e]"></span></div>
+      <div id="ranks-list"></div>
+    </section>
+
+    <!-- CODES -->
+    <section id="view-codes" class="hidden sect p-3">
+      <h2 class="text-lg font-black text-[#003d2d] mb-3">Redeem Codes</h2>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-ticket-alt"></i> Generate Code</div>
+        <div class="field"><label class="field-label">Code</label><input type="text" id="code-value" placeholder="GAMEBAZAR100" class="inp uppercase font-mono"></div>
+        <div class="field"><label class="field-label">Amount (৳)</label><input type="number" id="code-amount" placeholder="0" class="inp"></div>
+        <button type="button" onclick="addRedeemCode()" class="btn-pink mt-1"><i class="fas fa-plus"></i> Generate Code</button>
+      </div>
+      <div class="section-title">All Codes</div>
+      <div id="codes-list"></div>
+    </section>
+
+    <!-- TELEGRAM SETTINGS -->
+    <section id="view-settings-telegram" class="hidden sect p-3">
+      <div class="flex items-center gap-3 mb-3">
+        <button type="button" onclick="navTo('dashboard')" class="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-600"><i class="fas fa-arrow-left text-sm"></i></button>
+        <h2 class="text-base font-black text-[#003d2d]">Telegram Notifications</h2>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fab fa-telegram" style="color:#0088cc"></i> Bot Status</div>
+        <div id="tg-status-box" class="text-[11px] p-3 rounded-xl bg-gray-50 border border-gray-100 mb-3 leading-relaxed">
+          <i class="fas fa-spinner fa-spin mr-1"></i> Checking configuration...
+        </div>
+        <button type="button" onclick="testTelegramNotification()" class="btn-navy mb-2" id="tg-test-btn"><i class="fas fa-bolt"></i> Send Test Notification</button>
+        <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-[10.5px] text-blue-800 leading-relaxed">
+          <i class="fas fa-shield-halved mr-1"></i> <b>Secure:</b> Bot token is stored on <b>Vercel server</b> — never sent to browser. To update: Vercel Dashboard → Settings → Environment Variables.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fas fa-list-check"></i> Active Alerts</div>
+        <div class="space-y-2 text-[11px]">
+          <div class="flex items-center gap-2 p-2.5 bg-green-50 rounded-lg"><i class="fas fa-check-circle text-green-600"></i><span class="font-bold text-green-800">New User Registration</span></div>
+          <div class="flex items-center gap-2 p-2.5 bg-green-50 rounded-lg"><i class="fas fa-check-circle text-green-600"></i><span class="font-bold text-green-800">User Login</span></div>
+          <div class="flex items-center gap-2 p-2.5 bg-green-50 rounded-lg"><i class="fas fa-check-circle text-green-600"></i><span class="font-bold text-green-800">New Order</span></div>
+          <div class="flex items-center gap-2 p-2.5 bg-green-50 rounded-lg"><i class="fas fa-check-circle text-green-600"></i><span class="font-bold text-green-800">Voucher Order</span></div>
+          <div class="flex items-center gap-2 p-2.5 bg-green-50 rounded-lg"><i class="fas fa-check-circle text-green-600"></i><span class="font-bold text-green-800">Deposit Request</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="flex items-center justify-between mb-3">
+          <div class="card-title !mb-0"><i class="fas fa-history"></i> Recent Log</div>
+          <button type="button" onclick="loadNotifLog()" class="text-[10px] font-bold text-[#006a4e] bg-green-50 px-3 py-1.5 rounded-full"><i class="fas fa-sync-alt"></i></button>
+        </div>
+        <div id="tg-log-list" class="space-y-2"><p class="text-[11px] text-gray-400 text-center py-2">Click refresh to load</p></div>
+      </div>
+    </section>
+
+    <!-- Other Settings Pages (PASTE your existing 6 settings sections here: branding, appearance, payment, logos, popup, support, general, social) -->
+    <!-- These sections remain exactly the same as before - only change TIGER TOPUP → GAME BAZAR -->
+  </main>
+
+  <nav class="fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto bg-white border-t border-gray-100 shadow-[0_-6px_24px_rgba(0,106,78,0.08)] z-40">
+    <div class="flex items-center justify-between px-2 pt-1.5 pb-2">
+      <button type="button" onclick="navTo('dashboard')" class="nvi on" id="nav-dashboard"><i class="fas fa-chart-pie ni"></i><span>Dashboard</span></button>
+      <button type="button" onclick="navTo('orders')" class="nvi" id="nav-orders"><i class="fas fa-shopping-bag ni"></i><span>Orders</span></button>
+      <button type="button" onclick="navTo('users')" class="nvi" id="nav-users"><i class="fas fa-users ni"></i><span>Users</span></button>
+      <button type="button" onclick="navTo('deposits')" class="nvi" id="nav-deposits"><i class="fas fa-wallet ni"></i><span>Deposits</span></button>
+      <button type="button" onclick="navTo('dashboard')" class="nvi" id="nav-controls"><i class="fas fa-grip ni"></i><span>Controls</span></button>
+    </div>
+  </nav>
+</div>
+
+<!-- MODALS: paste your existing create-product, edit-product, create-user, user-modal, confirm modals here -->
+
+<div id="confirm-modal" class="hidden modal-overlay center">
+  <div class="modal-content center pop-in">
+    <div class="modal-body text-center">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-red-50 flex items-center justify-center"><i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i></div>
+      <h3 id="confirm-title" class="text-base font-black text-[#003d2d] mb-2">Are you sure?</h3>
+      <p id="confirm-msg" class="text-xs text-gray-500 mb-4"></p>
+      <div class="grid grid-cols-2 gap-2.5">
+        <button type="button" onclick="closeConfirm()" class="btn-ghost">Cancel</button>
+        <button type="button" id="confirm-yes" class="btn-danger">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { db, auth } from './js/firebase-config.js';
+  import { notify } from './js/telegram.js';
+  window.__db = db; window.__auth = auth; window.__notify = notify;
+</script>
+<script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#6366f1">
+<title>GAME BAZAR</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<link rel="stylesheet" href="/assets/css/user.css">
+</head>
+<body>
+
+<!-- AUTH -->
+<section id="authOverlay" class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo"><i class="fas fa-gamepad"></i></div>
+    <h1 class="auth-brand">GAME <span>BAZAR</span></h1>
+    <p class="auth-tag">বাংলাদেশের #1 টপআপ প্ল্যাটফর্ম</p>
+    <div class="auth-tabs">
+      <button onclick="switchAuth('login')" id="btn-login" class="auth-tab on">লগইন</button>
+      <button onclick="switchAuth('register')" id="btn-reg" class="auth-tab">রেজিস্টার</button>
+    </div>
+    <div id="loginForm">
+      <div class="auth-input"><i class="fas fa-envelope"></i><input type="email" id="loginEmail" placeholder="ইমেইল"></div>
+      <div class="auth-input"><i class="fas fa-lock"></i><input type="password" id="loginPass" placeholder="পাসওয়ার্ড"></div>
+      <button onclick="doLogin()" class="btn-main w-full">লগইন করুন</button>
+    </div>
+    <div id="registerForm" class="hidden">
+      <div class="auth-input"><i class="fas fa-user"></i><input type="text" id="regName" placeholder="পূর্ণ নাম"></div>
+      <div class="auth-input"><i class="fas fa-envelope"></i><input type="email" id="regEmail" placeholder="ইমেইল"></div>
+      <div class="auth-input"><i class="fas fa-phone"></i><input type="tel" id="regPhone" placeholder="ফোন নম্বর"></div>
+      <div class="auth-input"><i class="fas fa-lock"></i><input type="password" id="regPass" placeholder="পাসওয়ার্ড (৬+ অক্ষর)"></div>
+      <button onclick="doRegister()" class="btn-main w-full">একাউন্ট তৈরি করুন</button>
+    </div>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" class="app-shell hidden">
+  <header class="app-header">
+    <div class="header-left">
+      <button onclick="openSideMenu()" class="icon-btn"><i class="fas fa-bars"></i></button>
+      <div><h1 class="brand" id="appTitle">GAME BAZAR</h1><p class="brand-sub">TopUp Service</p></div>
+    </div>
+    <div class="balance-pill"><i class="fas fa-wallet"></i> ৳<span id="headerBalance">0</span></div>
+  </header>
+
+  <div class="notice-bar"><span class="notice-label"><i class="fas fa-bullhorn"></i> নোটিশ</span><div class="notice-scroll"><span id="noticeText">GAME BAZAR এ স্বাগতম...</span></div></div>
+
+  <main class="app-main">
+
+    <!-- HOME -->
+    <section id="sec-home" class="sec">
+      <div class="slider-wrap"><div id="sliderWrapper" class="slider-inner"><div class="slider-skeleton"></div></div><div id="sliderDots" class="slider-dots"></div></div>
+      <div id="servicesList" class="services-list"><div class="loading"><div class="spinner"></div></div></div>
+    </section>
+
+    <!-- TOPUP -->
+    <section id="sec-topup" class="sec hidden">
+      <div class="back-head"><button onclick="showSec('home')" class="icon-btn"><i class="fas fa-arrow-left"></i></button><h2 id="topupGameTitle">Game</h2></div>
+      <div class="game-info-card"><img id="topupGameImg" src="" alt=""><div><h3 id="topupSubTitle">Game</h3><p id="topupGameType">Loading...</p></div></div>
+      <div class="card">
+        <div class="step-head"><span class="step-num">১</span><h3>প্যাকেজ নির্বাচন করুন</h3></div>
+        <div id="productLoader" class="hidden loading"><div class="spinner"></div></div>
+        <div id="productsGrid" class="product-grid"></div>
+      </div>
+      <div id="playerIdSection" class="card">
+        <div class="step-head"><span class="step-num">২</span><h3>Player ID / UID</h3></div>
+        <input type="text" id="gamePlayerId" placeholder="আপনার Player ID লিখুন" class="input-main">
+        <p class="hint"><i class="fas fa-info-circle"></i> সঠিক ID দিন, ভুল হলে টপআপ ফেরত হয় না।</p>
+      </div>
+      <div class="card">
+        <div class="total-row"><div><p class="text-xs text-muted">Selected</p><p id="selectedPackageName" class="font-bold">None</p></div><div class="text-right"><p class="text-xs text-muted">Total</p><p class="total-price">৳ <span id="totalPrice">0</span></p></div></div>
+        <button onclick="processOrder()" class="btn-main w-full"><i class="fas fa-bolt"></i> এখনই কিনুন</button>
+      </div>
+      <div id="gameRulesBox" class="rules-box hidden"><div class="rules-head"><i class="fas fa-triangle-exclamation"></i> গুরুত্বপূর্ণ নিয়ম</div><p id="gameRulesText"></p></div>
+    </section>
+
+    <!-- ADD MONEY -->
+    <section id="sec-addmoney" class="sec hidden">
+      <div class="page-head"><h2>টাকা যোগ করুন</h2><p>নিরাপদ ও দ্রুত ডিপোজিট</p></div>
+      <div id="am-step-1">
+        <div class="card am-card">
+          <label class="field-label">জমার পরিমাণ</label>
+          <div class="amount-input"><span>৳</span><input type="number" id="newAmount" value="100"></div>
+          <div class="quick-amounts">
+            <button onclick="setQuickAmt(50)">৳৫০</button>
+            <button onclick="setQuickAmt(100)">৳১০০</button>
+            <button onclick="setQuickAmt(200)">৳২০০</button>
+            <button onclick="setQuickAmt(500)">৳৫০০</button>
+            <button onclick="setQuickAmt(1000)">৳১০০০</button>
+          </div>
+          <button onclick="goToMethodStep()" class="btn-main w-full">পেমেন্টে যান <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+      <div id="am-step-2" class="hidden">
+        <button onclick="backToAmount()" class="back-link"><i class="fas fa-arrow-left"></i> পিছনে</button>
+        <div class="card">
+          <h3 class="text-center font-bold mb-3">পেমেন্ট মেথড নির্বাচন করুন</h3>
+          <div id="paymentMethodsList" class="payment-methods-list"></div>
+          <div id="selectedMethodInfo" class="hidden mt-3">
+            <div class="pay-number-box"><div><p class="text-xs text-muted">টাকা পাঠানোর ঠিকানা</p><p id="payNumber" class="pay-number">লোড...</p></div><button onclick="copyPayNum()" class="copy-btn"><i class="fas fa-copy"></i> কপি</button></div>
+            <p id="ussdLine" class="ussd-line"></p>
+            <input type="text" id="payTrxInput" placeholder="TRANSACTION ID লিখুন" class="input-main mt-3" style="text-transform:uppercase;text-align:center;font-weight:700;letter-spacing:1px">
+            <button onclick="submitDeposit()" class="btn-main w-full mt-3"><i class="fas fa-check"></i> ডিপোজিট রিকোয়েস্ট</button>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4">
+        <h3 class="section-title">ডিপোজিট ইতিহাস</h3>
+        <div id="depositHistory"></div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="sec-history" class="sec hidden">
+      <div class="page-head"><h2>অর্ডার ইতিহাস</h2><p>আপনার সব অর্ডার</p></div>
+      <div class="tab-bar">
+        <button onclick="filterHist('all')" id="hf-all" class="tab on">সব</button>
+        <button onclick="filterHist('pending')" id="hf-pending" class="tab">প্রক্রিয়াধীন</button>
+        <button onclick="filterHist('success')" id="hf-success" class="tab">সম্পন্ন</button>
+      </div>
+      <div id="historyList"></div>
+    </section>
+
+    <!-- ACCOUNT -->
+    <section id="sec-account" class="sec hidden">
+      <div class="profile-card">
+        <div class="profile-avatar"><i class="fas fa-user"></i></div>
+        <h2 id="profileName">ব্যবহারকারী</h2>
+        <p id="profileEmail">user@email.com</p>
+        <div class="profile-stats">
+          <div><p>ব্যালেন্স</p><h4>৳<span id="profileBalance">0</span></h4></div>
+          <div><p>অর্ডার</p><h4 id="profileOrders">0</h4></div>
+          <div><p>খরচ</p><h4>৳<span id="profileSpent">0</span></h4></div>
+        </div>
+      </div>
+      <div class="card">
+        <button onclick="showSec('history')" class="account-item"><div class="acc-icon"><i class="fas fa-history"></i></div><span>অর্ডার ইতিহাস</span><i class="fas fa-chevron-right"></i></button>
+        <button onclick="showSec('addmoney')" class="account-item"><div class="acc-icon blue"><i class="fas fa-plus-circle"></i></div><span>টাকা যোগ করুন</span><i class="fas fa-chevron-right"></i></button>
+        <button onclick="openLiveChat()" class="account-item"><div class="acc-icon green"><i class="fas fa-comments"></i></div><span>লাইভ চ্যাট</span><i class="fas fa-chevron-right"></i></button>
+        <button onclick="doLogout()" class="account-item red"><div class="acc-icon red"><i class="fas fa-sign-out-alt"></i></div><span>লগআউট</span><i class="fas fa-chevron-right"></i></button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <button onclick="showSec('home')" id="nav-home" class="nav-btn on"><i class="fas fa-home"></i><span>হোম</span></button>
+    <button onclick="showSec('addmoney')" id="nav-addmoney" class="nav-btn"><i class="fas fa-wallet"></i><span>ওয়ালেট</span></button>
+    <button onclick="openLiveChat()" class="nav-btn fab-center"><i class="fas fa-comments"></i></button>
+    <button onclick="showSec('history')" id="nav-history" class="nav-btn"><i class="fas fa-history"></i><span>ইতিহাস</span></button>
+    <button onclick="showSec('account')" id="nav-account" class="nav-btn"><i class="fas fa-user"></i><span>একাউন্ট</span></button>
+  </nav>
+</div>
+
+<!-- SIDE MENU -->
+<div id="sideMenuOv" class="side-menu-ov" onclick="closeSideMenu()"></div>
+<div id="sideMenu" class="side-menu">
+  <div class="side-menu-head">
+    <div class="side-avatar"><i class="fas fa-user"></i></div>
+    <h3 id="sideName">User</h3>
+    <p id="sideEmail">email</p>
+    <div class="side-balance">৳ <span id="sideBalance">0</span></div>
+  </div>
+  <div class="side-menu-body">
+    <button onclick="showSec('home');closeSideMenu()" class="side-item"><i class="fas fa-home"></i> হোম</button>
+    <button onclick="showSec('addmoney');closeSideMenu()" class="side-item"><i class="fas fa-wallet"></i> টাকা যোগ করুন</button>
+    <button onclick="showSec('history');closeSideMenu()" class="side-item"><i class="fas fa-history"></i> অর্ডার ইতিহাস</button>
+    <button onclick="openLiveChat();closeSideMenu()" class="side-item"><i class="fas fa-comments"></i> লাইভ চ্যাট</button>
+    <button onclick="showSec('account');closeSideMenu()" class="side-item"><i class="fas fa-user"></i> একাউন্ট</button>
+    <button onclick="doLogout();closeSideMenu()" class="side-item red"><i class="fas fa-sign-out-alt"></i> লগআউট</button>
+  </div>
+</div>
+
+<!-- CHAT PANEL -->
+<div id="liveChatPanel" class="chat-panel hidden">
+  <div class="chat-panel-head">
+    <button onclick="closeLiveChat()" class="icon-btn white"><i class="fas fa-arrow-left"></i></button>
+    <div class="chat-avatar"><i class="fas fa-headset"></i></div>
+    <div class="chat-info"><h3>GAME BAZAR Support</h3><p><span class="dot"></span> Usually replies in minutes</p></div>
+  </div>
+  <div id="chatMessages" class="chat-messages"></div>
+  <div class="chat-input-bar">
+    <input type="text" id="userChatInput" placeholder="এখানে লিখুন..." onkeydown="if(event.key==='Enter')sendUserMsg()">
+    <button onclick="sendUserMsg()" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<script src="/assets/js/user.js"></script>
+</body>
+</html>

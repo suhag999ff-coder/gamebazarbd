@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>GAME BAZAR Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="select-none">
+
+<!-- ADMIN LOGIN -->
+<section id="login-sec" class="z-50">
+  <div class="auth-card">
+    <h1 class="auth-brand">GAME <span>BAZAR</span></h1>
+    <p class="auth-tagline">Admin Control Panel</p>
+    <div class="auth-field">
+      <input type="email" id="admin-email" placeholder="Admin Email" class="auth-input">
+      <i class="fas fa-envelope auth-icon"></i>
+    </div>
+    <div class="auth-field">
+      <input type="password" id="admin-pass" placeholder="Password" class="auth-input">
+      <i class="fas fa-lock auth-icon"></i>
+    </div>
+    <button onclick="adminLogin()" class="auth-btn"><i class="fas fa-sign-in-alt"></i> LOG IN</button>
+  </div>
+</section>
+
+<!-- ADMIN APP -->
+<div id="admin-app" class="app-shell hidden">
+  <header class="bg-white sticky top-0 z-40 shadow-sm border-b p-4 flex justify-between items-center">
+    <h1 class="text-base font-black text-[#003d2d]">GAME BAZAR Admin</h1>
+    <button onclick="adminLogout()" class="text-red-500"><i class="fas fa-power-off"></i></button>
+  </header>
+
+  <main class="main-content p-3">
+    <section id="view-dashboard" class="sect">
+      <div class="revenue-card">
+        <div class="revenue-label">Total Revenue</div>
+        <div class="revenue-amount" id="dash-revenue">৳ 0</div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="stat-card-pro"><div class="stat-label">Total Users</div><div class="stat-value" id="dash-users">0</div></div>
+        <div class="stat-card-pro"><div class="stat-label">Pending Orders</div><div class="stat-value" id="dash-orders">0</div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script type="module">
+  import { db, auth } from './js/firebase-config.js';
+  window.__db = db; window.__auth = auth;
+</script>
+<script src="js/admin.js"></script>
+</body>
+</html>

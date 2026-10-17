@@ -1,0 +1,9 @@
+{
+  "name": "gamebazar",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes"
+  },
+  "engines": { "node": ">=18" }
+}
